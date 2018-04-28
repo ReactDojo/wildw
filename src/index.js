@@ -10,12 +10,14 @@ const reducerCreate = params => {
 };
 import CardDetails from './view/CardDetails';
 import MyOffer from './view/MyOffer';
+import MyCard from './view/MyCard';
 import Usercard from './view/Usercard';
 import SideBar from './view/SideBar';
 import Home from './view/start/home';
 import Welcome from './view/start/auth/welcome';
 import Login from './view/start/auth/login';
 import Register from './view/start/auth/register';
+import store from './redux/store';
 const getSceneStyle = (props, computedProps) => {
     const style = {
         flex: 1,
@@ -30,7 +32,9 @@ const getSceneStyle = (props, computedProps) => {
 export default class Main extends Component<{}> {
     constructor(props) {
         super(props);
+
     }
+
     render() {
         return (
             <View style={{ flex: 1 }}>
@@ -51,6 +55,7 @@ export default class Main extends Component<{}> {
                                     component = {Usercard}
                                     initial
                                 />
+                                
                                 <Scene
                                     key = "offerdetails"
                                     hideNavBar = {true}
@@ -61,7 +66,11 @@ export default class Main extends Component<{}> {
                                     hideNavBar = {true}
                                     component = {MyOffer}
                                 />
-
+                                <Scene
+                                    key = "mycard"
+                                    hideNavBar = {true}
+                                    component = {MyCard}
+                                />
                             </Scene>
                         </Scene>
                     </Scene>
