@@ -16,79 +16,97 @@ import {
     FETCHING_OFFERBYCATEGORY_FAILURE,
     FETCHING_SEARCH_REQUEST,
     FETCHING_SEARCH_SUCCESS,
-    FETCHING_SEARCH_FAILURE
+    FETCHING_SEARCH_FAILURE,
+    FETCHING_QRCODE_SUCCESS,
+    FETCHING_QRCODE_FAILURE,
+    POSTING_OFFER_TO_USER_SUCCESS,
+    POSTING_OFFER_TO_USER_FAILURE
 } from '../actions/types';
 import { combineReducers } from 'redux';
-import {AsyncStorage} from 'react-native';
+import { AsyncStorage } from 'react-native';
 const initialState = {
     isFetching: false,
     errorMessage: '',
     isloginFetching: false,
     issignupFetching: false,
-    isloadingbycategory:false,
+    isloadingbycategory: false,
+    isQRCodeFetching: false,
+    qr_code: {},
     offer: [],
-    category:[]
+    category: []
 };
-import {Actions} from 'react-native-router-flux';
+import { Actions } from 'react-native-router-flux';
 const OfferReducer = (state = initialState, action) => {
-    switch (action.type){
+    switch (action.type) {
         case FETCHING_OFFER_REQUEST:
-            state = Object.assign({}, state, {isFetching: true})
+            state = Object.assign({}, state, { isFetching: true })
             return state;
         case FETCTHING_OFFER_FAILURE:
-            state = Object.assign({}, state, {isFetching: false, errorMessag:action.payload}) 
+            state = Object.assign({}, state, { isFetching: false, errorMessag: action.payload })
             return state;
         case FETCHING_OFFER_SUCCESS:
-            state = Object.assign({}, state, {isFetching: false, offer: action.payload});
+            state = Object.assign({}, state, { isFetching: false, offer: action.payload });
             return state;
         case FETCHING_OFFERBYCATEGORY_REQUEST:
-            state = Object.assign({}, state, {isFetching: true,isloadingbycategory: true})
+            state = Object.assign({}, state, { isFetching: true, isloadingbycategory: true })
             return state;
         case FETCHING_OFFERBYCATEGORY_FAILURE:
-            state = Object.assign({}, state, {isFetching: false, errorMessag:action.payload}) 
+            state = Object.assign({}, state, { isFetching: false, errorMessag: action.payload })
             return state;
         case FETCHING_OFFERBYCATEGORY_SUCCESS:
-            state = Object.assign({}, state, {isFetching: false, offer: action.payload});
+            state = Object.assign({}, state, { isFetching: false, offer: action.payload });
             return state;
         case FETCHING_SEARCH_REQUEST:
-            state = Object.assign({}, state, {isFetching: true,isloadingbycategory: true})
+            state = Object.assign({}, state, { isFetching: true, isloadingbycategory: true })
             return state;
         case FETCHING_SEARCH_FAILURE:
-            state = Object.assign({}, state, {isFetching: false, errorMessag:action.payload}) 
+            state = Object.assign({}, state, { isFetching: false, errorMessag: action.payload })
             return state;
         case FETCHING_SEARCH_SUCCESS:
-            state = Object.assign({}, state, {isFetching: false, offer: action.payload.result});
-            return state;        
+            state = Object.assign({}, state, { isFetching: false, offer: action.payload.result });
+            return state;
         case FETCHING_CATEGORY_REQUEST:
-            state = Object.assign({}, state, {isFetching: true})
+            state = Object.assign({}, state, { isFetching: true })
             return state;
         case FETCHING_CATEGORY_FAILURE:
-            state = Object.assign({}, state, {isFetching: false, errorMessag:action.payload}) 
+            state = Object.assign({}, state, { isFetching: false, errorMessag: action.payload })
             return state;
         case FETCHING_CATEGORY_SUCCESS:
-            state = Object.assign({}, state, {isFetching: false, category: action.payload});
-            return state;    
+            state = Object.assign({}, state, { isFetching: false, category: action.payload });
+            return state;
         case FETCHING_LOGIN_REQUEST:
-            state = Object.assign({}, state, {isloginFetching: true})
+            state = Object.assign({}, state, { isloginFetching: true })
             return state;
         case FETCHING_LOGIN_FAILURE:
-            state = Object.assign({}, state, {isloginFetching: false, errorMessag:action.payload}) 
+            state = Object.assign({}, state, { isloginFetching: false, errorMessag: action.payload })
             return state;
         case FETCHING_LOGIN_SUCCESS:
-            AsyncStorage.setItem('token', action.payload.accessToken);
-            state = Object.assign({}, state, {isloginFetching: false});
+            AsyncStorage.setItem('token', action.payload.token);
+            AsyncStorage.setItem('user_id', action.payload.id);
+            state = Object.assign({}, state, { isloginFetching: false });
             return state;
         case FETCHING_SIGNUP_REQUEST:
-            state = Object.assign({}, state, {issignupFetching: true})
+            state = Object.assign({}, state, { issignupFetching: true })
             return state;
         case FETCHING_SIGNUP_FAILURE:
-             state = Object.assign({}, state, {issignupFetching: false, errorMessag:action.payload}) 
+            state = Object.assign({}, state, { issignupFetching: false, errorMessag: action.payload })
             return state;
         case FETCHING_SIGNUP_SUCCESS:
-            state = Object.assign({}, state, {issignupFetching: false,isloginFetching: false});
-            return state;        
+            state = Object.assign({}, state, { issignupFetching: false, isloginFetching: false });
+            return state;
+        case FETCHING_QRCODE_SUCCESS:
+            console.log(state); 
+            state = Object.assign({}, state, { isQRCodeFetching: false, qr_code: action.payload });
+            return state;
+        case FETCHING_QRCODE_FAILURE:
+            state = Object.assign({}, state, { isQRCodeFetching: false, errorMessage: action.payload });
+            return state;
+        case POSTING_OFFER_TO_USER_SUCCESS:
+            return state;
+        case POSTING_OFFER_TO_USER_FAILURE:
+            return state;
         default:
-            return state;        
+            return state;
     }
 };
 const rootReducer = combineReducers({ OfferReducer });

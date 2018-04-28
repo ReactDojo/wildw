@@ -16,11 +16,16 @@ import {
     FETCHING_OFFERBYCATEGORY_FAILURE,
     FETCHING_SEARCH_REQUEST,
     FETCHING_SEARCH_SUCCESS,
-    FETCHING_SEARCH_FAILURE
+    FETCHING_SEARCH_FAILURE,
+    FETCHING_QRCODE_SUCCESS,
+    FETCHING_QRCODE_FAILURE,
+    POSTING_OFFER_TO_USER_SUCCESS,
+    POSTING_OFFER_TO_USER_FAILURE
 
 } from './types';
 import { AsyncStorage } from 'react-native';
 import { Actions } from 'react-native-router-flux';
+import store from '../store';
 const REQUEST_URL = "https://offerbotapp.herokuapp.com";
 // offer list
 export const fetchingOfferRequest = () => ({ type: FETCHING_OFFER_REQUEST });
@@ -172,6 +177,7 @@ export const fetchLogin = (data) => {
             dispatch(fetchingLoginSuccess(json));
             dispatch(fetchOffer());
             dispatch(fetchCategory());
+            dispatch(fetchUserQRCode());
             Actions.offerlist();
         }
         catch (error) {
@@ -210,6 +216,86 @@ export const fetchSignup = (data) => {
         }
         catch (error) {
             dispatch(fetchingSignupFailure(error));
+        }
+    }
+}
+
+
+
+// user QR code
+export const fetchUserQRCodeSuccess = (json) => ({
+    type: FETCHING_QRCODE_SUCCESS,
+    payload: json
+});
+
+export const fetchUserQRCodeFailure = (error) => ({
+    type: FETCHING_QRCODE_FAILURE,
+    payload: error
+});
+
+export const fetchUserQRCode = () => {
+    return async dispatch => {
+        try {
+            const token = await AsyncStorage.getItem('token');
+            const user_id = await AsyncStorage.getItem('user_id');
+
+            let requestConfig = {
+                method: "GET",
+                headers: { 'Authorization': 'Bearer ' + token }
+            }
+
+            let url = REQUEST_URL + '/api/users/' + user_id + '/qrcodes';
+            let respond = await fetch(url, requestConfig);
+            let json = await respond.json();
+            let data = json[0];
+            data.request_url = REQUEST_URL;
+            
+            dispatch(fetchUserQRCodeSuccess(data));
+        }
+        catch (error) {
+            dispatch(fetchUserQRCodeFailure(error));
+        }
+    }
+}
+
+
+
+// Save Offer to User
+export const postOfferToUserSuccess = (json) => ({
+    type: POSTING_OFFER_TO_USER_SUCCESS,
+    payload: json
+});
+
+export const postOfferToUserFailure = (error) => ({
+    type: POSTING_OFFER_TO_USER_FAILURE,
+    payload: error
+});
+
+export const postOfferToUser = (offer) => {
+    return async dispatch => {
+        try {
+            const token = await AsyncStorage.getItem('token');
+            const user_id = await AsyncStorage.getItem('user_id');
+            const url = REQUEST_URL + '/api/users/' + user_id + '/offers';
+            delete offer.id;
+
+            let requestConfig = {
+                method: "POST",
+                headers: {
+                    'Authorization': 'Bearer ' + token,
+                    'Accept': 'application/json',
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(offer)
+            }
+
+            let respond = await fetch(url, requestConfig);
+            let json = await respond.json();
+            
+            dispatch(postOfferToUserSuccess(json));
+        }
+        catch (error) {
+            dispatch(postOfferToUserFailure(error));
         }
     }
 }

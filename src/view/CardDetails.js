@@ -1,10 +1,10 @@
 import React, { Component } from 'react';
-import { StyleSheet, Image, TouchableHighlight, FlatList, Dimensions, Modal } from 'react-native';
+import { StyleSheet, Image, TouchableHighlight, FlatList, Dimensions, Modal, Platform } from 'react-native';
 import GridView from "react-native-easy-grid-view";
 import { Col, Row, Grid } from "react-native-easy-grid";
 import Entypo from '@expo/vector-icons/Entypo';
 import Foundation from '@expo/vector-icons/Foundation';
-import { Container, Header, Content, Tab, Tabs, TabHeading, Form, Item, Input, Label, Button, Text, Thumbnail, Icon, Right, Left, Body, View, Card, CardItem, List, ListItem } from 'native-base';
+import { Container, Header, Content, Tab, Tabs, TabHeading, Form, Item, Input, Label, Button, Text, Thumbnail, Icon, Right, Left, Body, View, Card, CardItem, List, ListItem, Toast } from 'native-base';
 import dumpimage from '../images/dump.jpg';
 import logoimage from '../images/logoimage.png';
 import styles from '../styles/carddetails';
@@ -13,10 +13,12 @@ import { Actions } from 'react-native-router-flux';
 import Gallery from 'react-native-image-gallery';
 import HeaderBar from '../components/HeaderBar';
 import { Font } from 'expo';
+import { postOfferToUser } from '../redux/actions/OfferActions';
+import { connect } from 'react-redux';
 const { width, height } = Dimensions.get('window');
 const equalWidth = (width - 116) / 3;
 
-export default class CardDetails extends Component {
+class CardDetails extends Component {
 
   constructor(props) {
     super(props);
@@ -36,6 +38,7 @@ export default class CardDetails extends Component {
 
     this._openGallery = this._openGallery.bind(this);
     this._toggleGallery = this._toggleGallery.bind(this);
+    this._saveOfferToUser = this._saveOfferToUser.bind(this);
   }
 
   _keyExtractor = (item, index) => index.toString();
@@ -46,6 +49,18 @@ export default class CardDetails extends Component {
 
   _openGallery() {
     this._toggleGallery();
+  }
+
+  _saveOfferToUser() {
+    Actions.pop();
+    this.props.postOfferToUser(this.props.details);
+    Toast.show({
+      text: 'Your offer has been saved. Go to myOffers to redeem this when visiting the cashier station.',
+      buttonText: 'Dismiss',
+      position: "top",
+      type: "success",
+      duration: 10000
+    })
   }
 
   renderRowItem = ({ item }) => {
@@ -86,8 +101,8 @@ export default class CardDetails extends Component {
     }
   }
   render() {
-    
-    if(this.state.fontLoaded){
+
+    if (this.state.fontLoaded) {
       const image_url_array = this.props.details.image_urls;
       const image_urls = image_url_array[0];
       let image_content = <Image resizeMode='cover' source={{ uri: image_urls }} style={styles.listimage} />;
@@ -95,7 +110,25 @@ export default class CardDetails extends Component {
         <Container style={styles.container}>
           <Grid>
             <Row style={{ height: 74 }}>
-              <HeaderBar />
+              <Content style={styles.header}>
+                <Grid>
+                  <Col>
+                    { Platform.OS === 'ios' ?
+                    <TouchableHighlight onPress={() => { Actions.pop(); }}>
+                      <LinearGradient start={{ x: 0.0, y: 0.25 }} end={{ x: 0.5, y: 1.0 }}
+                        locations={[0, 0.6, 1]}
+                        colors={['rgb(1,123,125)', 'rgb(3,55,55)', 'rgb(3,35,35)']} style={styles.back_button}>
+                        <Entypo name='chevron-left' size={35} color="#FFFFFF" />
+                      </LinearGradient>
+                    </TouchableHighlight>
+                    : null }
+                  </Col>
+                  <Col>
+                    <Image source={logoimage} style={styles.logo} />
+                  </Col>
+                  <Col ></Col>
+                </Grid>
+              </Content>
             </Row>
             <Row>
               <Grid>
@@ -141,7 +174,7 @@ export default class CardDetails extends Component {
                             <Grid>
                               <Col></Col>
                               <Col style={{ width: 165 }}>
-                                <TouchableHighlight style={{ borderRadius: 8 }}>
+                                <TouchableHighlight style={{ borderRadius: 8 }} onPress={this._saveOfferToUser}>
                                   <LinearGradient
                                     start={{ x: 0.0, y: 0.25 }}
                                     end={{ x: 0.5, y: 1.0 }}
@@ -317,6 +350,9 @@ export default class CardDetails extends Component {
     }
     else
       return null;
- 
+
   }
 }
+
+
+export default connect(null, { postOfferToUser })(CardDetails)
