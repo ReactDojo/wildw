@@ -51,13 +51,13 @@ class Map extends Component {
                                 longitudeDelta: 0.0421,
                             }} >
                             <MapView.Marker
-                                coordinate={{latitude: 38.7504664, longitude: -105.1757747}}
+                                coordinate={{ latitude: 38.7504664, longitude: -105.1757747 }}
                                 title={'Wildwood Casino'}
                                 description={'119 N Fifth St, Cripple Creek, CO 80813'}
                             />
                         </MapView>
                     </Row>
-                    <Row style={{ height: 150 , padding:15}}>
+                    <Row style={{ height: 150, padding: 15 }}>
                         <Content >
                             <Row>
                                 <Text style={styles.mapTitle}>Wildwood Casino</Text>
@@ -67,6 +67,13 @@ class Map extends Component {
                             </Row>
                             <Row>
                                 <Text style={styles.mapDetail}>(719) 244-9700</Text>
+                            </Row>
+                            <Row>
+                                <Col>
+                                    <TouchableHighlight onPress={Actions.pop}>
+                                        <Text style={styles.pop_cancel}>Cancel</Text>
+                                    </TouchableHighlight>
+                                </Col>
                             </Row>
                         </Content>
                     </Row>
