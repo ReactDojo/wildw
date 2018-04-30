@@ -169,8 +169,17 @@ class CardDetails extends Component {
                         <Grid>
                           <Row>
                             <View style={{ flex: 1, marginLeft: 19, marginRight: 25 }}><Text style={{ fontSize: 30, color: '#FFFFFF', fontFamily: 'Montserrat-Medium' }}>{this.props.details.name}</Text>
-                              <Text style={{ fontSize: 15, marginTop: 14, color: '#FFFFFF', lineHeight: 18 }}>Description</Text>
+                              <Text style={{ fontSize: 15, marginTop: 14, color: '#FFFFFF', lineHeight: 18, fontWeight: 'bold' }}>Description</Text>
                               <Text style={{ fontSize: 14, color: '#FFFFFF', fontFamily: 'Montserrat-Medium', lineHeight: 18 }}>{this.props.details.description}</Text>
+
+                              <Text style={{ fontSize: 15, marginTop: 14, color: '#FFFFFF', lineHeight: 18, fontWeight: 'bold' }}>Story</Text>
+                              <Text style={{ fontSize: 14, color: '#FFFFFF', fontFamily: 'Montserrat-Medium', lineHeight: 18 }}>{this.props.details.story}</Text>
+
+                              <Text style={{ fontSize: 15, marginTop: 14, color: '#FFFFFF', lineHeight: 18, fontWeight: 'bold' }}>Expiration</Text>
+                              <Text style={{ fontSize: 14, color: '#FFFFFF', fontFamily: 'Montserrat-Medium', lineHeight: 18 }}>Expiration details go here..</Text>
+
+                              <Text style={{ fontSize: 15, marginTop: 14, color: '#FFFFFF', lineHeight: 18, fontWeight: 'bold' }}>Fine Print</Text>
+                              <Text style={{ fontSize: 14, color: '#FFFFFF', fontFamily: 'Montserrat-Medium', lineHeight: 18 }}>Fine Print details go here...</Text>
                             </View>
                           </Row>
                           <Row style={{ height: 104 }}>
