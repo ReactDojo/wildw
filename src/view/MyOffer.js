@@ -5,7 +5,7 @@
  */
 
 import React, { Component } from 'react';
-
+import { connect } from 'react-redux';
 import { Col, Row, Grid } from "react-native-easy-grid";
 import {Tab, Tabs, TabHeading, Container, Header, Content, Form, Item, Input, Label, Button, Text, Thumbnail, Icon, Right,List, ListItem,Card, CardItem, View } from 'native-base';
 import {
@@ -17,8 +17,10 @@ import styles from '../styles/myoffer';
 import barcodeimage from '../images/barcode.png';
 import MyOfferList from '../components/MyOfferList';
 import MyOfferReddemList from '../components/MyOfferReddemList';
+import { fetchAvailableOffers } from '../redux/actions/OfferActions'
 import {Actions} from 'react-native-router-flux';
-export default class MyOffer extends Component<{}> {
+
+class MyOffer extends Component<{}> {
     
   constructor(props){
     super(props);
@@ -33,6 +35,7 @@ export default class MyOffer extends Component<{}> {
     this.setState({ activeWindow: "0" });
     this.setState({ popupWindow: "0" });
     this.setState({modalVisible:false}); 
+    this.props.fetchAvailableOffers();
   }
   openModal() {
     this.setState({modalVisible:true});
@@ -79,3 +82,5 @@ export default class MyOffer extends Component<{}> {
     );
   }
 }
+
+export default connect(null, { fetchAvailableOffers })(MyOffer);

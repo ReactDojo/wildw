@@ -25,7 +25,6 @@ class MyCard extends Component {
   }
 
   render() {
-    let qr_code_image_url = this.props.qr_code.request_url + '/' + this.props.qr_code.url;
     return (
       <Container style={styles.container}>
         <Grid>
@@ -49,7 +48,7 @@ class MyCard extends Component {
                   <View>
                     <Text style={{ color: '#fff', marginBottom: 10, textAlign: 'center' }}>This is your Players Club Code</Text>
                     <View style={{ backgroundColor: '#fff' }}>
-                      <SVGImage style={{ width: 250, height: 250 }} source={{ uri: qr_code_image_url }} />
+                      <SVGImage style={{ width: 250, height: 250 }} source={{ uri: this.props.qr_code.url }} />
                     </View>
                     <Text style={{ color: '#fff', marginTop: 10, textAlign: 'center' }}>{this.props.qr_code.key}</Text>
                   </View>
