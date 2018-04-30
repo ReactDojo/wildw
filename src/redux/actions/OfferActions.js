@@ -5,6 +5,7 @@ import {
     FETCHING_LOGIN_REQUEST,
     FETCHING_LOGIN_SUCCESS,
     FETCHING_LOGIN_FAILURE,
+    FETCHING_LOGIN_ERROR,
     FETCHING_SIGNUP_REQUEST,
     FETCHING_SIGNUP_SUCCESS,
     FETCHING_SIGNUP_FAILURE,
@@ -178,12 +179,16 @@ export const fetchingLoginFailure = error => ({
     payload: error
 });
 
+export const fetchingLoginError = error => ({
+    type: FETCHING_LOGIN_ERROR,
+    payload: error
+});
+
 export const fetchLogin = (data) => {
     return async dispatch => {
         dispatch(fetchingLoginRequest());
         try {
             // const value =await AsyncStorage.getItem('token');
-            // console.log('mytoken:',value);
             let requestConfig = {
                 method: "POST",
                 headers: {
@@ -194,11 +199,14 @@ export const fetchLogin = (data) => {
             }
             let url = REQUEST_URL + '/login';
             let respond = await fetch(url, requestConfig);
-            console.log('=====================', respond);
             let json = await respond.json();
-            dispatch(fetchingLoginSuccess(json));
-            dispatch(fetchOffer());
-            dispatch(fetchCategory());
+            if (json && json.statusCode >= 400) {
+                dispatch(fetchingLoginError(json.description))
+            } else {
+                dispatch(fetchingLoginSuccess(json));
+                dispatch(fetchOffer());
+                dispatch(fetchCategory());
+            }
         }
         catch (error) {
             dispatch(fetchingLoginFailure(error));

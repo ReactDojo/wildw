@@ -16,6 +16,8 @@ export class Authentication extends Component {
             password: "",
             error: {email: "", password: "", general: ""},
         };
+
+        this.submit = this.submit.bind(this);
     }
 
     submit() {
@@ -59,7 +61,6 @@ export class Authentication extends Component {
         var title = "Register";
         if (this.props.login) title = "Login";
         else if (this.props.recover) title = "Recover Password";
-
         return (
             <View style={styles.wrapper}>
                 <NavBar/>
@@ -73,6 +74,7 @@ export class Authentication extends Component {
                         <View style={styles.loginForm}>
                             <View style={styles.container}>
                                 <Text style={[styles.errorText]}>{this.state.error['general']}</Text>
+                                <Text>{this.props.errorAlertMessage}</Text>
 
                                 <Text style={styles.emailInputLabel}>Player Username</Text>
                                 <AuthTextInput
@@ -85,6 +87,7 @@ export class Authentication extends Component {
                                 />
 
                                 {//if the container type is not Recover Password, show the password input
+                                    (!this.props.recover) &&
                                     <Text style={styles.passwordInputLabel}>Password</Text>
                                 }
                                 {//if the container type is not Recover Password, show the password input
@@ -105,8 +108,8 @@ export class Authentication extends Component {
                                           onPress={Actions.password}>{"Forgot Password"}</Text>
                                 }
 
-                                <Button onPress={this.submit.bind(this)}
-                                        btnText={(this.props.recover) ? "Submit" : title}/>
+                                <Button onPress={this.submit}
+                                        btnText={(this.props.recover && this.props.isloginFetching === false) ? "Submit" : title}/>
                                 <View/>
                             </View>
                         </View>

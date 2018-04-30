@@ -7,6 +7,11 @@ import * as Progress from 'react-native-progress';
 import { Authentication } from './index';
 
 class Register extends Component {
+    constructor (props) {
+        super(props)
+
+        this.register = this.register.bind(this);
+    }
 
   register(data, errorCB) {
     this.props.fetchSignup(data);
@@ -21,12 +26,8 @@ class Register extends Component {
 
     return (
       <Grid>
-        <Row>
-          <Authentication register onPress={this.register.bind(this)} />
-        </Row>
-        <Row style={{ flex: 1, alignSelf: 'center', justifyContent: 'center', }}>
+          <Authentication register onPress={this.register} />
           {content}
-        </Row>
       </Grid>
     );
   }

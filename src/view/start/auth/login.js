@@ -13,11 +13,8 @@ class Login extends Component {
     constructor(props) {
         super(props);
 
-        this.state = {
-            fetching: false
-        }
-
         this.go_home = this.go_home.bind(this);
+        this.login = this.login.bind(this);
     }
 
     componentWillMount() {
@@ -33,21 +30,19 @@ class Login extends Component {
     }
 
     login(data, errorCB) {
-        this.setState({fetching: true}, function () {
-            this.props.fetchLogin(data);
-        });
+        this.props.fetchLogin(data);
     }
 
     render() {
         let content = <View/>;
         if (this.props.isloginFetching) {
-            content = <Progress.Circle size={30} indeterminate={true}/>;
+            content = <View style={{ position: 'absolute', bottom: 208, left: '46%', right: 0 }}><Progress.Circle size={30} indeterminate={true}/></View>;
         }
 
         return (
             <Grid>
                 <View style={{flex: 1}}>
-                    <Authentication login onPress={this.login.bind(this)}/>
+                    <Authentication login onPress={this.login} errorAlertMessage={this.props.errorAlertMessage} isloginFetching={this.props.isloginFetching} />
                     {content}
                 </View>
             </Grid>
@@ -59,7 +54,8 @@ class Login extends Component {
 function mapStateToProps(state, props) {
     return {
         loggedIn: state.OfferReducer.loggedIn,
-        isloginFetching: state.OfferReducer.isloginFetching
+        isloginFetching: state.OfferReducer.isloginFetching,
+        errorAlertMessage: state.OfferReducer.errorAlertMessage
     }
 }
 

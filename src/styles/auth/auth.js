@@ -89,7 +89,7 @@ module.exports = StyleSheet.create({
     loginForm: {
         display: 'flex',
         width: 345,
-        height: 250,
+        height: 285,
         marginTop: 55,
         borderRadius: 15,
         backgroundColor: "#0b9496",
