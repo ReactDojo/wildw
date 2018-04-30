@@ -15,6 +15,9 @@ import HeaderBar from '../components/HeaderBar';
 import { Font } from 'expo';
 import { postOfferToUser } from '../redux/actions/OfferActions';
 import { connect } from 'react-redux';
+import { MapView } from 'expo';
+import { Marker } from 'react-native-maps';
+
 const { width, height } = Dimensions.get('window');
 const equalWidth = (width - 116) / 3;
 
@@ -195,7 +198,22 @@ class CardDetails extends Component {
                         <Grid>
                           <Row>
                             <View style={{ flex: 1, marginLeft: 15, marginRight: 16 }}>
-                              <View style={{ height: 156, backgroundColor: '#FFFFFF' }}></View>
+                              <View style={{ height: 156, backgroundColor: '#FFFFFF' }}>
+                                  <MapView
+                                      style={{ flex: 1 }}
+                                      initialRegion={{
+                                          latitude: 38.7504664,
+                                          longitude: -105.1757747,
+                                          latitudeDelta: 2.2922,
+                                          longitudeDelta: 2.2421
+                                      }} >
+                                      <MapView.Marker
+                                          coordinate={{latitude: 38.7504664, longitude: -105.1757747}}
+                                          title={'Wildwood Casino'}
+                                          description={'119 N Fifth St, Cripple Creek, CO 80813'}
+                                      />
+                                  </MapView>
+                              </View>
                               <Text style={{ marginTop: 10, fontSize: 15, fontFamily: 'Montserrat-Bold', color: '#FFFFFF' }}>Where</Text>
                               <Text style={{ marginTop: 10, fontSize: 14, fontFamily: 'Montserrat-Medium', color: '#FFFFFF' }}>Lorem Imspum Bar elit. Sed gravida dolor nec tortor condimentum, et tincidunt arcu eleifend.</Text>
                               <Text style={{ marginTop: 30, fontSize: 14, color: '#FFFFFF', fontFamily: 'Montserrat-Medium' }}>For help call: 290-123-9010</Text>

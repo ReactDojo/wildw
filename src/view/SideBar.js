@@ -78,7 +78,7 @@ export default class SideBar extends React.Component {
                 <TouchableHighlight onPress={() => Actions.mycard()}>
                   <Text style={styles.menu_text}>myCard</Text>
                 </TouchableHighlight>
-                <TouchableHighlight>
+                <TouchableHighlight onPress={() => Actions.map()}>
                   <Text style={styles.menu_text}>Map</Text>
                 </TouchableHighlight>
                 <TouchableHighlight>

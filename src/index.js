@@ -12,6 +12,7 @@ import CardDetails from './view/CardDetails';
 import MyOffer from './view/MyOffer';
 import MyCard from './view/MyCard';
 import Usercard from './view/Usercard';
+import Map from './view/Map';
 import SideBar from './view/SideBar';
 import Home from './view/start/home';
 import Welcome from './view/start/auth/welcome';
@@ -70,6 +71,12 @@ export default class Main extends Component<{}> {
                                     key = "mycard"
                                     hideNavBar = {true}
                                     component = {MyCard}
+                                />
+
+                                <Scene
+                                    key = "map"
+                                    hideNavBar = {true}
+                                    component = {Map}
                                 />
                             </Scene>
                         </Scene>
