@@ -20,8 +20,9 @@ import {
     FETCHING_QRCODE_SUCCESS,
     FETCHING_QRCODE_FAILURE,
     POSTING_OFFER_TO_USER_SUCCESS,
-    POSTING_OFFER_TO_USER_FAILURE
-
+    POSTING_OFFER_TO_USER_FAILURE,
+    FETCHING_AVAILABLE_OFFERS_TO_USER_SUCCESS,
+    FETCHING_AVAILABLE_OFFERS_TO_USER_FAILURE
 } from './types';
 import { AsyncStorage } from 'react-native';
 import { Actions } from 'react-native-router-flux';
@@ -178,6 +179,7 @@ export const fetchLogin = (data) => {
             dispatch(fetchOffer());
             dispatch(fetchCategory());
             dispatch(fetchUserQRCode());
+            dispatch(fetchAvailableOffers());
             Actions.offerlist();
         }
         catch (error) {
@@ -248,7 +250,6 @@ export const fetchUserQRCode = () => {
             let respond = await fetch(url, requestConfig);
             let json = await respond.json();
             let data = json[0];
-            data.request_url = REQUEST_URL;
             
             dispatch(fetchUserQRCodeSuccess(data));
         }
@@ -300,3 +301,41 @@ export const postOfferToUser = (offer) => {
     }
 }
 
+
+// GET - Available Offers
+export const fetchAvailableOffersSuccess = (json) => ({
+    type: FETCHING_AVAILABLE_OFFERS_TO_USER_SUCCESS,
+    payload: json
+});
+
+export const fetchAvailableOffersFailure = (error) => ({
+    type: FETCHING_AVAILABLE_OFFERS_TO_USER_FAILURE,
+    payload: error
+});
+
+export const fetchAvailableOffers = () => {
+    return async dispatch => {
+        try {
+            const token = await AsyncStorage.getItem('token');
+            const user_id = await AsyncStorage.getItem('user_id');
+            const url = REQUEST_URL + '/api/users/' + user_id + '/offers';
+
+            let requestConfig = {
+                method: "GET",
+                headers: {
+                    'Authorization': 'Bearer ' + token,
+                    'Accept': 'application/json',
+                    'Content-Type': 'application/json'
+                }
+            }
+
+            let respond = await fetch(url, requestConfig);
+            let json = await respond.json();
+
+            dispatch(fetchAvailableOffersSuccess(json));
+        } 
+        catch (error) {
+            dispatch(fetchAvailableOffersFailure(error));
+        }
+    }
+}

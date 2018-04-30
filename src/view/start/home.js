@@ -18,7 +18,7 @@ import { Actions } from 'react-native-router-flux';
 import { Button } from './index'; //Import your Button
 
 import styles from '../../styles/auth/index' //Import your styles
-import { fetchOffer, fetchCategory, fetchUserQRCode } from '../../redux/actions/OfferActions';
+import { fetchOffer, fetchCategory, fetchUserQRCode, fetchAvailableOffers } from '../../redux/actions/OfferActions';
 import * as Progress from 'react-native-progress';
 class Home extends Component {
     constructor(props) {
@@ -29,6 +29,7 @@ class Home extends Component {
         this.props.fetchOffer();
         this.props.fetchCategory();
         this.props.fetchUserQRCode();
+        this.props.fetchAvailableOffers();
         AsyncStorage.getItem('token', (err, token) => {
             if (token === null) Actions.welcome();
             else Actions.offerlist();
@@ -49,4 +50,4 @@ class Home extends Component {
 
 
 
-export default connect(null, { fetchOffer, fetchCategory, fetchUserQRCode })(Home);
+export default connect(null, { fetchOffer, fetchCategory, fetchUserQRCode, fetchAvailableOffers })(Home);

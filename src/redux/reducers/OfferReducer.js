@@ -20,7 +20,9 @@ import {
     FETCHING_QRCODE_SUCCESS,
     FETCHING_QRCODE_FAILURE,
     POSTING_OFFER_TO_USER_SUCCESS,
-    POSTING_OFFER_TO_USER_FAILURE
+    POSTING_OFFER_TO_USER_FAILURE,
+    FETCHING_AVAILABLE_OFFERS_TO_USER_SUCCESS,
+    FETCHING_AVAILABLE_OFFERS_TO_USER_FAILURE
 } from '../actions/types';
 import { combineReducers } from 'redux';
 import { AsyncStorage } from 'react-native';
@@ -33,6 +35,7 @@ const initialState = {
     isQRCodeFetching: false,
     qr_code: {},
     offer: [],
+    available_offers: [],
     category: []
 };
 import { Actions } from 'react-native-router-flux';
@@ -104,6 +107,12 @@ const OfferReducer = (state = initialState, action) => {
         case POSTING_OFFER_TO_USER_SUCCESS:
             return state;
         case POSTING_OFFER_TO_USER_FAILURE:
+            return state;
+        case FETCHING_AVAILABLE_OFFERS_TO_USER_SUCCESS:
+            state = Object.assign({}, state, { available_offers: action.payload });
+            return state;
+        case FETCHING_AVAILABLE_OFFERS_TO_USER_FAILURE:
+            state = Object.assign({}, state, { errorMessage: action.payload });
             return state;
         default:
             return state;
