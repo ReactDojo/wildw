@@ -17,6 +17,7 @@ import { postOfferToUser } from '../redux/actions/OfferActions';
 import { connect } from 'react-redux';
 import { MapView } from 'expo';
 import { Marker } from 'react-native-maps';
+import moment from 'moment';
 
 const { width, height } = Dimensions.get('window');
 const equalWidth = (width - 116) / 3;
@@ -176,10 +177,10 @@ class CardDetails extends Component {
                               <Text style={{ fontSize: 14, color: '#FFFFFF', fontFamily: 'Montserrat-Medium', lineHeight: 18 }}>{this.props.details.story}</Text>
 
                               <Text style={{ fontSize: 15, marginTop: 14, color: '#FFFFFF', lineHeight: 18, fontWeight: 'bold' }}>Expiration</Text>
-                              <Text style={{ fontSize: 14, color: '#FFFFFF', fontFamily: 'Montserrat-Medium', lineHeight: 18 }}>Expiration details go here..</Text>
+                              <Text style={{ fontSize: 14, color: '#FFFFFF', fontFamily: 'Montserrat-Medium', lineHeight: 18 }}>{moment(this.props.details.end_date).format('MMMM Do YYYY, h:mm:ss a')}</Text>
 
                               <Text style={{ fontSize: 15, marginTop: 14, color: '#FFFFFF', lineHeight: 18, fontWeight: 'bold' }}>Fine Print</Text>
-                              <Text style={{ fontSize: 14, color: '#FFFFFF', fontFamily: 'Montserrat-Medium', lineHeight: 18 }}>Fine Print details go here...</Text>
+                              <Text style={{ fontSize: 14, color: '#FFFFFF', fontFamily: 'Montserrat-Medium', lineHeight: 18 }}>This offer is a {this.props.details.pricing} and it is valid from {moment(this.props.details.start_date).format('MMM Do YYYY')} to {moment(this.props.details.end_date).format('MMM Do YYYY')}. It's price is ${this.props.details.original_price} for ${this.props.details.sale_price}. The estimated value is ${this.props.details.perceived_value}</Text>
                             </View>
                           </Row>
                           <Row style={{ height: 104 }}>
