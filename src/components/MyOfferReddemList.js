@@ -1,3 +1,4 @@
+
 import React, { Component } from "react";
 import { StyleSheet, FlatList, Text, Image, Content, View, TouchableHighlight, Modal } from "react-native";
 import PropTypes from "prop-types";
@@ -10,18 +11,22 @@ import { Col, Row, Grid } from "react-native-easy-grid";
 import Barcode from 'react-native-barcode-builder';
 
 class MyOfferReddemList extends Component {
+
   constructor(props) {
     super(props);
 
     this.state = {
       modalVisible: false,
+      redeemed_offers: this.props.available_offers.filter(offer => offer.redeemed)
     }
+
   }
 
   componentWillMount() {
     this.setState({ popupWindow: "0" });
     this.setState({ modalVisible: false });
   }
+
 
   openModal(item) {
     this.setState({
@@ -50,7 +55,9 @@ class MyOfferReddemList extends Component {
         </View>
       </TouchableHighlight>;
     }
-    return (<View>{content}</View>);
+    return (
+      <View>{content}</View>
+    );
   };
 
   render() {
@@ -58,16 +65,17 @@ class MyOfferReddemList extends Component {
       <View>
         <FlatList
           style={{ flex: 1 }}
-          data={this.props.randomoffer.offer}
+          data={this.state.redeemed_offers}
           renderItem={this._renderItem}
           keyExtractor={this._keyExtractor}
           showsVerticalScrollIndicator={false}
-          showsHorizontalScrollIndicator={false} />
-
+          showsHorizontalScrollIndicator={false}
+        />
         <Modal
           visible={this.state.modalVisible}
           animationType={'slide'}
-          onRequestClose={() => this.closeModal()}>
+          onRequestClose={() => this.closeModal()}
+        >
           <Grid style={{ backgroundColor: '#000000' }}>
             <Row style={{ height: 113 }}>
               <Grid>
@@ -97,8 +105,8 @@ class MyOfferReddemList extends Component {
               {this.state.popupWindow == "1" ?
                 <Grid>
                   <Row>
-                    {/* <Image resizeMode='cover' source={barcodeimage} style={{height:178,flex:1}} /> */}
-                    <View style={{ flex: 1, alignSelf: 'center', justifyContent: 'center', height: 178, backgroundColor: 'white', width: 375 }}><Barcode value={this.state.details_barcode} format="CODE128" /></View>
+                    <View style={{ flex: 1, alignSelf: 'center', justifyContent: 'center', }}>
+                      <Barcode value={this.state.details_barcode} format="CODE128" /></View>
                   </Row>
                   <Row>
                     <View>
@@ -113,7 +121,11 @@ class MyOfferReddemList extends Component {
             </Row>
             <Row style={{ height: 100 }}>
               <Grid>
-                <Col><TouchableHighlight onPress={() => this.closeModal()}><Text style={styles.pop_cancel}>Cancel</Text></TouchableHighlight></Col>
+                <Col>
+                  <TouchableHighlight onPress={() => this.closeModal()}>
+                    <Text style={styles.pop_cancel}>Cancel</Text>
+                  </TouchableHighlight>
+                </Col>
               </Grid>
             </Row>
           </Grid>
@@ -125,8 +137,7 @@ class MyOfferReddemList extends Component {
 
 function mapStateToProps(state, props) {
   return {
-    randomoffer: state.OfferReducer
+    available_offers: state.OfferReducer.available_offers
   }
 }
-
-export default connect(mapStateToProps)(MyOfferReddemList);
+export default connect(mapStateToProps, null)(MyOfferReddemList);

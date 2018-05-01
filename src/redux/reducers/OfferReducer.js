@@ -33,7 +33,7 @@ const initialState = {
     category: [],
     errorAlertMessage: ''
 };
-
+import { Actions } from 'react-native-router-flux';
 const OfferReducer = (state = initialState, action) => {
     switch (action.type) {
         case FETCHING_OFFER_REQUEST:

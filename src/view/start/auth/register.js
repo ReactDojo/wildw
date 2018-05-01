@@ -1,7 +1,15 @@
+/**
+ * Author: Moses Adekunle Esan for E&M Digital
+ * Date: 7/27/2017
+ * Project: How to Build a React Native/Redux app using a JWT-Powered API.
+ */
+
+'use strict';
+
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { View } from 'native-base';
-import { fetchSignup, fetchOffer } from '../../../redux/actions/OfferActions'; //Import your actions
+import { fetchSignup, fetchOffer } from '../../../redux/actions/OfferActions';//Import your actions
 import { Col, Row, Grid } from "react-native-easy-grid";
 import * as Progress from 'react-native-progress';
 import { Authentication } from './index';
@@ -35,9 +43,8 @@ class Register extends Component {
 }
 
 function mapStateToProps(state, props) {
-  return {
-    issignupFetching: state.OfferReducer.issignupFetching
-  }
+    return {
+        issignupFetching: state.OfferReducer.issignupFetching
+    }
 }
-
 export default connect(mapStateToProps, { fetchSignup })(Register);
