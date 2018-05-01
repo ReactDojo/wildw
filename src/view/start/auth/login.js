@@ -1,62 +1,48 @@
-import React, {Component} from 'react';
-import {connect} from 'react-redux';
-import {fetchLogin, fetchOffer} from '../../../redux/actions/OfferActions';
-import {View} from 'native-base';
-import {Authentication} from './index';
-import {Text} from 'native-base';
-import {Col, Row, Grid} from "react-native-easy-grid";
+
+'use strict';
+
+import React, { Component } from 'react';
+import { connect } from 'react-redux';
+import { fetchLogin, fetchOffer } from '../../../redux/actions/OfferActions'; //Import your actions
+import { View } from 'native-base';
+import { Authentication } from './index';
+import { Text } from 'native-base';
+import { Col, Row, Grid } from "react-native-easy-grid";
 import * as Progress from 'react-native-progress';
-import {Actions} from 'react-native-router-flux';
-
+import { Actions } from 'react-native-router-flux';
 class Login extends Component {
-
     constructor(props) {
-        super(props);
-
-        this.go_home = this.go_home.bind(this);
-        this.login = this.login.bind(this);
+        super(props)
+        this.state = {
+            fetching: false
+        };
     }
-
-    componentWillMount() {
-        // this.go_home;
-    }
-
-    go_home() {
-        if (!this.props.isloginFetching) {
-            Actions.offerlist();
-            // this.props.fetchOffer();
-            // setTimeout(Actions.offerlist(),5000)
-        }
-    }
-
-    login(data, errorCB) {
-        this.props.fetchLogin(data);
-    }
-
     render() {
-        let content = <View/>;
+        let content = <View />;
         if (this.props.isloginFetching) {
-            content = <View style={{ position: 'absolute', bottom: 208, left: '46%', right: 0 }}><Progress.Circle size={30} indeterminate={true}/></View>;
+            content = <Progress.Circle size = {30} indeterminate = {true} />;
         }
-
         return (
             <Grid>
-                <View style={{flex: 1}}>
-                    <Authentication login onPress={this.login} errorAlertMessage={this.props.errorAlertMessage} isloginFetching={this.props.isloginFetching} />
-                    {/* {content} */}
-                </View>
+                <Row>
+                    <Authentication login onPress = {this.login.bind(this)} />
+                </Row>
+                <Row style = {{ flex: 1, alignSelf: 'center', justifyContent: 'center'}}>
+                    {content}
+                </Row>
             </Grid>
         );
     }
 
-}
-
+    login(data, errorCB) {
+        this.setState({ fetching: true });
+        this.props.fetchLogin(data);
+    }
+};
 function mapStateToProps(state, props) {
     return {
         loggedIn: state.OfferReducer.loggedIn,
-        isloginFetching: state.OfferReducer.isloginFetching,
-        errorAlertMessage: state.OfferReducer.errorAlertMessage
+        isloginFetching: state.OfferReducer.isloginFetching
     }
 }
-
-export default connect(mapStateToProps, {fetchLogin})(Login);
+export default connect(mapStateToProps, { fetchLogin })(Login);
