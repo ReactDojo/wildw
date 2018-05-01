@@ -4,6 +4,7 @@ import {
     FETCTHING_OFFER_FAILURE,
     FETCHING_LOGIN_REQUEST,
     FETCHING_LOGIN_SUCCESS,
+    FETCHING_LOGIN_ERROR,
     FETCHING_LOGIN_FAILURE,
     FETCHING_SIGNUP_REQUEST,
     FETCHING_SIGNUP_SUCCESS,
@@ -16,108 +17,93 @@ import {
     FETCHING_OFFERBYCATEGORY_FAILURE,
     FETCHING_SEARCH_REQUEST,
     FETCHING_SEARCH_SUCCESS,
-    FETCHING_SEARCH_FAILURE,
-    FETCHING_QRCODE_SUCCESS,
-    FETCHING_QRCODE_FAILURE,
-    POSTING_OFFER_TO_USER_SUCCESS,
-    POSTING_OFFER_TO_USER_FAILURE,
-    FETCHING_AVAILABLE_OFFERS_TO_USER_SUCCESS,
-    FETCHING_AVAILABLE_OFFERS_TO_USER_FAILURE
+    FETCHING_SEARCH_FAILURE
 } from '../actions/types';
-import { combineReducers } from 'redux';
-import { AsyncStorage } from 'react-native';
+import {combineReducers} from 'redux';
+import {AsyncStorage} from 'react-native';
+import {Actions} from 'react-native-router-flux';
+
 const initialState = {
     isFetching: false,
     errorMessage: '',
     isloginFetching: false,
     issignupFetching: false,
     isloadingbycategory: false,
-    isQRCodeFetching: false,
-    qr_code: {},
     offer: [],
-    available_offers: [],
-    category: []
+    category: [],
+    errorAlertMessage: ''
 };
 import { Actions } from 'react-native-router-flux';
 const OfferReducer = (state = initialState, action) => {
     switch (action.type) {
         case FETCHING_OFFER_REQUEST:
-            state = Object.assign({}, state, { isFetching: true })
+            state = Object.assign({}, state, {isFetching: true})
             return state;
         case FETCTHING_OFFER_FAILURE:
-            state = Object.assign({}, state, { isFetching: false, errorMessag: action.payload })
+            state = Object.assign({}, state, {isFetching: false, errorMessag: action.payload})
             return state;
         case FETCHING_OFFER_SUCCESS:
-            state = Object.assign({}, state, { isFetching: false, offer: action.payload });
+            state = Object.assign({}, state, {isFetching: false, offer: action.payload});
             return state;
         case FETCHING_OFFERBYCATEGORY_REQUEST:
-            state = Object.assign({}, state, { isFetching: true, isloadingbycategory: true })
+            state = Object.assign({}, state, {isFetching: true, isloadingbycategory: true})
             return state;
         case FETCHING_OFFERBYCATEGORY_FAILURE:
-            state = Object.assign({}, state, { isFetching: false, errorMessag: action.payload })
+            state = Object.assign({}, state, {isFetching: false, errorMessag: action.payload})
             return state;
         case FETCHING_OFFERBYCATEGORY_SUCCESS:
-            state = Object.assign({}, state, { isFetching: false, offer: action.payload });
+            state = Object.assign({}, state, {isFetching: false, offer: action.payload});
             return state;
         case FETCHING_SEARCH_REQUEST:
-            state = Object.assign({}, state, { isFetching: true, isloadingbycategory: true })
+            state = Object.assign({}, state, {isFetching: true, isloadingbycategory: true})
             return state;
         case FETCHING_SEARCH_FAILURE:
-            state = Object.assign({}, state, { isFetching: false, errorMessag: action.payload })
+            state = Object.assign({}, state, {isFetching: false, errorMessag: action.payload})
             return state;
         case FETCHING_SEARCH_SUCCESS:
-            state = Object.assign({}, state, { isFetching: false, offer: action.payload.result });
+            state = Object.assign({}, state, {isFetching: false, offer: action.payload.result});
             return state;
         case FETCHING_CATEGORY_REQUEST:
-            state = Object.assign({}, state, { isFetching: true })
+            state = Object.assign({}, state, {isFetching: true})
             return state;
         case FETCHING_CATEGORY_FAILURE:
-            state = Object.assign({}, state, { isFetching: false, errorMessag: action.payload })
+            state = Object.assign({}, state, {isFetching: false, errorMessag: action.payload})
             return state;
         case FETCHING_CATEGORY_SUCCESS:
-            state = Object.assign({}, state, { isFetching: false, category: action.payload });
+            state = Object.assign({}, state, {isFetching: false, category: action.payload});
             return state;
+        case FETCHING_LOGIN_ERROR:
+            state = Object.assign({}, state, {isloginFetching: false, errorAlertMessage: action.payload });
         case FETCHING_LOGIN_REQUEST:
-            state = Object.assign({}, state, { isloginFetching: true })
+            state = Object.assign({}, state, {isloginFetching: true});
             return state;
         case FETCHING_LOGIN_FAILURE:
-            state = Object.assign({}, state, { isloginFetching: false, errorMessag: action.payload })
+            console.log('respond:', action.payload);
+            state = Object.assign({}, state, {isloginFetching: false, errorMessag: action.payload})
             return state;
         case FETCHING_LOGIN_SUCCESS:
-            AsyncStorage.setItem('token', action.payload.token);
-            AsyncStorage.setItem('user_id', action.payload.id);
-            state = Object.assign({}, state, { isloginFetching: false });
+            AsyncStorage.setItem('token', action.payload.accessToken);
+            state = Object.assign({}, state, {isloginFetching: false});
+            //save the token
+            Actions.offerlist();
             return state;
         case FETCHING_SIGNUP_REQUEST:
-            state = Object.assign({}, state, { issignupFetching: true })
+            state = Object.assign({}, state, {issignupFetching: true});
             return state;
         case FETCHING_SIGNUP_FAILURE:
-            state = Object.assign({}, state, { issignupFetching: false, errorMessag: action.payload })
+            console.log('respond:', action.payload);
+            state = Object.assign({}, state, {issignupFetching: false, errorMessag: action.payload});
             return state;
         case FETCHING_SIGNUP_SUCCESS:
-            state = Object.assign({}, state, { issignupFetching: false, isloginFetching: false });
-            return state;
-        case FETCHING_QRCODE_SUCCESS:
-            console.log(state); 
-            state = Object.assign({}, state, { isQRCodeFetching: false, qr_code: action.payload });
-            return state;
-        case FETCHING_QRCODE_FAILURE:
-            state = Object.assign({}, state, { isQRCodeFetching: false, errorMessage: action.payload });
-            return state;
-        case POSTING_OFFER_TO_USER_SUCCESS:
-            return state;
-        case POSTING_OFFER_TO_USER_FAILURE:
-            return state;
-        case FETCHING_AVAILABLE_OFFERS_TO_USER_SUCCESS:
-            state = Object.assign({}, state, { available_offers: action.payload });
-            return state;
-        case FETCHING_AVAILABLE_OFFERS_TO_USER_FAILURE:
-            state = Object.assign({}, state, { errorMessage: action.payload });
+            state = Object.assign({}, state, {issignupFetching: false, isloginFetching: false});
+            //save the token
+            Actions.login();
             return state;
         default:
             return state;
     }
-};
-const rootReducer = combineReducers({ OfferReducer });
+}
+
+const rootReducer = combineReducers({OfferReducer});
 
 export default rootReducer;

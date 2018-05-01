@@ -5,9 +5,14 @@
  */
 
 'use strict';
+<<<<<<< HEAD
+import React, {Component} from 'react';
+import {View, Text, TextInput, TouchableOpacity} from 'react-native';
+=======
 
 import React, {Component} from 'react';
 var { View, Text, TextInput, TouchableOpacity } = require('react-native');
+>>>>>>> master
 import {Actions} from 'react-native-router-flux';
 import Ionicons from 'react-native-vector-icons/Ionicons'
 import styles from '../../styles/auth/index'
@@ -16,11 +21,19 @@ import auth_styles from '../../styles/auth/auth'
 export class NavBar extends Component {
     render() {
         return (
+<<<<<<< HEAD
+            <View style={[{height: 64, padding: 15, paddingTop: 20}]}>
+                <TouchableOpacity
+                    onPress={Actions.pop}
+                    style={{height: 44, width: 44, justifyContent: "center"}}>
+                    <Ionicons name={"md-arrow-back"}
+=======
             <View style = {[{height: 64, padding: 15, paddingTop:20}]}>
                 <TouchableOpacity
                     onPress={Actions.pop}
                     style={{height: 44, width: 44, justifyContent:"center"}}>
                     <Ionicons name={ "md-arrow-back"}
+>>>>>>> master
                               size={24} style={{height: 24}} color={"rgb(83,182,249)"}/>
                 </TouchableOpacity>
             </View>
@@ -45,6 +58,22 @@ export class Button extends Component {
 export class AuthTextInput extends Component {
     render() {
         return (
+<<<<<<< HEAD
+            <View style={{borderWidth: 0, marginBottom: 5}}>
+                <View style={auth_styles.inputContainer}>
+                    <TextInput
+                        onChangeText={this.props.onChangeText}
+                        placeholder={this.props.placeholder}
+                        autoFocus={this.props.autoFocus}
+                        style={[auth_styles.textInput, {}]}
+                        value={this.props.value}
+                        secureTextEntry={this.props.secureTextEntry}
+                        autoCapitalize='none'
+                    />
+                </View>
+                {
+                    (this.props.error.length > 0) &&
+=======
             <View style={{borderWidth:0, marginBottom:5}}>
                 <View style={auth_styles.inputContainer}>
                     <TextInput
@@ -59,6 +88,7 @@ export class AuthTextInput extends Component {
                 </View>
                 {
                     (this.props.error.length > 0 ) &&
+>>>>>>> master
                     <Text style={[auth_styles.errorText]}>{this.props.error}</Text>
                 }
             </View>
