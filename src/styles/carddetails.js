@@ -119,7 +119,7 @@ module.exports = StyleSheet.create({
   tabactivetext: {
     color: "#ffffff",
     alignSelf: "center",
-    fontFamily: "Montserrat",
+    fontFamily: "Montserrat-Bold",
     fontSize: 13,
     fontStyle: "normal",
     letterSpacing: -0.27,
@@ -135,6 +135,16 @@ module.exports = StyleSheet.create({
     marginTop: 17,
     fontFamily: 'Montserrat-Bold',
     textAlign: "left",
-  }
+  },
+
+  back_button: {
+    marginTop: 9,
+    paddingTop: 7,
+    height: 50,
+    width: 50,
+    paddingLeft: 8,
+    borderRadius: 25,
+    marginLeft: 14,
+  },
 
 });  
