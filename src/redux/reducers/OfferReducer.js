@@ -73,7 +73,6 @@ const OfferReducer = (state = initialState, action) => {
             state = Object.assign({}, state, {isFetching: false, category: action.payload});
             return state;
         case FETCHING_LOGIN_ERROR:
-            console.log('*************************************');
             state = Object.assign({}, state, {isloginFetching: false, errorAlertMessage: action.payload });
         case FETCHING_LOGIN_REQUEST:
             state = Object.assign({}, state, {isloginFetching: true});

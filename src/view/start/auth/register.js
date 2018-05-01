@@ -27,7 +27,7 @@ class Register extends Component {
     return (
       <Grid>
           <Authentication register onPress={this.register} />
-          {content}
+          {/* {content} */}
       </Grid>
     );
   }

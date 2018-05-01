@@ -43,7 +43,7 @@ class Login extends Component {
             <Grid>
                 <View style={{flex: 1}}>
                     <Authentication login onPress={this.login} errorAlertMessage={this.props.errorAlertMessage} isloginFetching={this.props.isloginFetching} />
-                    {content}
+                    {/* {content} */}
                 </View>
             </Grid>
         );
