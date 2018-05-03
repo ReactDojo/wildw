@@ -8,7 +8,7 @@ import FontAwesome from 'react-native-vector-icons/FontAwesome';
 import dumpimage from '../images/dump.jpg';
 import { Actions } from 'react-native-router-flux';
 import { connect } from 'react-redux';
-import { fetchOfferByCategory } from '../redux/actions/OfferActions';
+import { fetchOfferByCategory, fetchSearch } from '../redux/actions/OfferActions';
 import { Col, Row, Grid } from "react-native-easy-grid";
 class SearchList extends Component {
   constructor(props) {
@@ -17,12 +17,13 @@ class SearchList extends Component {
   }
   gotocarddetails(value) {
     this.props.close();
+    this.props.fetchSearch(value);
   }
-  _keyExtractor = item => item.id;
+  _keyExtractor = item => item.name;
 
   _renderItem = ({ item }) => {
     return (
-      <TouchableHighlight onPress={() => this.gotocarddetails()}>
+      <TouchableHighlight onPress={() => this.gotocarddetails(item.name)}>
         <View>
           <Text style={styles.searchlistitemtext}>{item.name}</Text>
         </View>
@@ -34,7 +35,7 @@ class SearchList extends Component {
     return (
       <FlatList
         style = {{ flex: 1 }}
-        data = {this.props.randomoffer.offer}
+        data = {this.props.randomoffer.history}
         renderItem = {this._renderItem}
         keyExtractor = {this._keyExtractor}
         showsVerticalScrollIndicator = {false}
@@ -49,4 +50,4 @@ function mapStateToProps(state, props) {
   }
 }
 
-export default connect(mapStateToProps, null)(SearchList);
+export default connect(mapStateToProps, {fetchSearch})(SearchList);

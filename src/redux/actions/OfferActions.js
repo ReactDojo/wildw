@@ -10,13 +10,16 @@ import {
     FETCHING_SIGNUP_FAILURE,
     FETCHING_CATEGORY_REQUEST,
     FETCHING_CATEGORY_SUCCESS,
-    FETCHING_CATEGORY_FAILURE,
+    FECTHING_CATEGORY_FAILURE,
     FETCHING_OFFERBYCATEGORY_REQUEST,
     FETCHING_OFFERBYCATEGORY_SUCCESS,
     FETCHING_OFFERBYCATEGORY_FAILURE,
     FETCHING_SEARCH_REQUEST,
     FETCHING_SEARCH_SUCCESS,
-    FETCHING_SEARCH_FAILURE
+    FETCHING_SEARCH_FAILURE,
+    FETCHING_ADD_HISTORY,
+    FETCHING_GET_HISTORY,
+    FETCHING_RESET_HISTORY
 
 } from './types';
 import { AsyncStorage } from 'react-native';
@@ -213,4 +216,80 @@ export const fetchSignup = (data) => {
         }
     }
 }
+// history
+export const fetchAddHistory = (data) => {
+    return async  dispatch => {
+        try{
+            let json = {
+                name: data
+            };
+            
+            AsyncStorage.getItem('search', (err, keyword) => {
+                let histories = [];
+                if( keyword != null ){
+                    histories = JSON.parse(keyword);
+                    histories.unshift(json);
+                }
+                else{
+                    histories.unshift(json);
+                }
+                AsyncStorage.setItem('search',JSON.stringify(histories))
+                dispatch(fetchAddHistoryRequest(histories))
+            }
+            )
+        }
+        catch(error){
 
+
+        }
+        
+
+    };
+}
+
+export const fetchAddHistoryRequest = json =>({
+    type: FETCHING_ADD_HISTORY,
+    payload: json
+})
+
+export const fetchResetHistory = () =>{
+    return async  dispatch => {
+        try{
+            let json = [];
+            AsyncStorage.setItem('search',JSON.stringify(json))
+            dispatch(fetchResetHistoryRequest(json));
+        }
+        catch(error){
+
+        }
+       
+    }
+}
+export const fetchResetHistoryRequest = json => ({
+    type: FETCHING_RESET_HISTORY,
+    payload: json
+})
+
+export const fetchGetHistory = () => {
+    return async  dispatch => {
+        try{
+            let histories = [];
+            AsyncStorage.getItem('search', (err,keyword) =>{
+            if(keyword != null){
+                histories = JSON.parse(keyword);
+            }
+            else {
+                histories = [];
+            }
+            dispatch(fetchGetHistoryRequest(histories))
+        })  
+        }
+        catch(error){
+        }
+    } 
+}
+
+export const  fetchGetHistoryRequest = json => ({
+    type: FETCHING_GET_HISTORY,
+    payload: json
+})

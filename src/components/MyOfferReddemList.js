@@ -68,7 +68,7 @@ class MyOfferReddemList extends Component {
         />
         <Modal
           visible={this.state.modalVisible}
-          animationType={'slide'}
+          animationType={'fade'}
           onRequestClose={() => this.closeModal()}
         >
           <Grid style={{ backgroundColor: '#000000' }}>

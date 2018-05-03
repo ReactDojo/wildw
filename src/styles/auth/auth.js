@@ -34,7 +34,6 @@ module.exports = StyleSheet.create({
   textInput: {
     fontSize: 14,
     height: 35,
-    fontFamily: 'Helvetica Neue',
     color: "#333333"
   },
 

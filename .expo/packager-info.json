@@ -1,8 +1,8 @@
 {
   "expoServerPort": 19000,
   "packagerPort": 19001,
-  "packagerPid": 38095,
-  "expoServerNgrokUrl": "https://gn-j8n.gabribram.wildwoodoffers-reactnative.exp.direct",
-  "packagerNgrokUrl": "https://packager.gn-j8n.gabribram.wildwoodoffers-reactnative.exp.direct",
-  "ngrokPid": 38113
+  "packagerPid": 765,
+  "expoServerNgrokUrl": "https://gn-j8n.gabribram.wildwoodoffers-reactnative-branch.exp.direct",
+  "packagerNgrokUrl": "https://packager.gn-j8n.gabribram.wildwoodoffers-reactnative-branch.exp.direct",
+  "ngrokPid": 781
 }

@@ -10,13 +10,16 @@ import {
     FETCHING_SIGNUP_FAILURE,
     FETCHING_CATEGORY_REQUEST,
     FETCHING_CATEGORY_SUCCESS,
-    FETCHING_CATEGORY_FAILURE,
+    FECTHING_CATEGORY_FAILURE,
     FETCHING_OFFERBYCATEGORY_REQUEST,
     FETCHING_OFFERBYCATEGORY_SUCCESS,
     FETCHING_OFFERBYCATEGORY_FAILURE,
     FETCHING_SEARCH_REQUEST,
     FETCHING_SEARCH_SUCCESS,
-    FETCHING_SEARCH_FAILURE
+    FETCHING_SEARCH_FAILURE,
+    FETCHING_ADD_HISTORY,
+    FETCHING_GET_HISTORY,
+    FETCHING_RESET_HISTORY
 } from '../actions/types';
 import { combineReducers } from 'redux';
 import {AsyncStorage} from 'react-native';
@@ -27,7 +30,8 @@ const initialState = {
     issignupFetching: false,
     isloadingbycategory:false,
     offer: [],
-    category:[]
+    category:[],
+    history:[],
 };
 import {Actions} from 'react-native-router-flux';
 const OfferReducer = (state = initialState, action) => {
@@ -62,7 +66,7 @@ const OfferReducer = (state = initialState, action) => {
         case FETCHING_CATEGORY_REQUEST:
             state = Object.assign({}, state, {isFetching: true})
             return state;
-        case FETCHING_CATEGORY_FAILURE:
+        case FECTHING_CATEGORY_FAILURE:
             state = Object.assign({}, state, {isFetching: false, errorMessag:action.payload}) 
             return state;
         case FETCHING_CATEGORY_SUCCESS:
@@ -75,7 +79,7 @@ const OfferReducer = (state = initialState, action) => {
             state = Object.assign({}, state, {isloginFetching: false, errorMessag:action.payload}) 
             return state;
         case FETCHING_LOGIN_SUCCESS:
-            AsyncStorage.setItem('token', action.payload.accessToken);
+            AsyncStorage.setItem('token', action.payload.token);
             state = Object.assign({}, state, {isloginFetching: false});
             return state;
         case FETCHING_SIGNUP_REQUEST:
@@ -86,7 +90,13 @@ const OfferReducer = (state = initialState, action) => {
             return state;
         case FETCHING_SIGNUP_SUCCESS:
             state = Object.assign({}, state, {issignupFetching: false,isloginFetching: false});
-            return state;        
+            return state;
+        case FETCHING_ADD_HISTORY:
+            state = Object.assign({}, state, { history:action.payload })
+        case FETCHING_GET_HISTORY:
+            state = Object.assign({}, state, { history: action.payload } )
+        case FETCHING_RESET_HISTORY:
+            state = Object.assign({}, state, { history: action.payload })        
         default:
             return state;        
     }
