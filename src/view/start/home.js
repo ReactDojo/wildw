@@ -20,6 +20,7 @@ class Home extends Component {
         this.props.fetchGetHistory();
         this.props.fetchUserQRCode();
         this.props.fetchAvailableOffers();
+        this.props.fetchAvailableStores();
         AsyncStorage.getItem('token', (err, token) => {
             if (token === null) Actions.welcome();
             else Actions.offerlist();
@@ -41,4 +42,6 @@ class Home extends Component {
 
 
 
-export default connect(null, { fetchOffer, fetchCategory, fetchUserQRCode, fetchAvailableOffers, fetchGetHistory })(Home);
+export default connect(null, 
+    { fetchOffer, fetchCategory, fetchUserQRCode, fetchAvailableOffers, fetchGetHistory, fetchAvailableStores }
+)(Home);

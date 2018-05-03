@@ -418,3 +418,42 @@ export const fetchAvailableOffers = () => {
         }
     }
 }
+
+
+//GET Stores by Offer
+export const fetchAvailableStoresSuccess = (json) => ({
+    type: FETCHING_AVAILABLE_STORE_SUCCESS,
+    payload: json
+});
+
+export const fetchAvailableStoresFailure = (error) => ({
+    type: FETCHING_AVAILABLE_STORE_FAILURE,
+    payload: error
+});
+
+export const fetchAvailableStores = () => {
+    return async dispatch => {
+        try {
+            const token = await AsyncStorage.getItem('token');
+            const user_id = await AsyncStorage.getItem('user_id');
+            const url = REQUEST_URL + '/api/offers/' + offer_id + '/store';
+
+            let requestConfig = {
+                method: "GET",
+                headers: {
+                    'Authorization': 'Bearer ' + token,
+                    'Accept': 'application/json',
+                    'Content-Type': 'application/json'
+                }
+            }
+
+            let respond = await fetch(url, requestConfig);
+            let json = await respond.json();
+
+            dispatch(fetchAvailableStoresSuccess(json));
+        } 
+        catch (error) {
+            dispatch(fetchAvailableStoresFailure(error));
+        }
+    }
+}

@@ -38,7 +38,8 @@ class CardDetails extends Component {
         { source: { uri: 'https://images.pexels.com/photos/9056/pexels-photo.jpg' } },
         { source: { uri: 'https://images.pexels.com/photos/9056/pexels-photo.jpg' } },
       ],
-      images_index: 0
+      images_index: 0,
+      store: [],
     }
 
     this._openGallery = this._openGallery.bind(this);
@@ -247,6 +248,8 @@ class CardDetails extends Component {
                         </Col>
                       </Grid>
                     </Row>
+
+                    {/* DETAILS */}
                     {this.state.activeWindow == "0" ?
                       <Row>
                         <Grid>
@@ -285,6 +288,8 @@ class CardDetails extends Component {
                         </Grid>
                       </Row>
                       : null}
+
+                    {/* LOCATION */}
                     {this.state.activeWindow == "1" ?
                       <Row>
                         <Grid>
@@ -331,6 +336,8 @@ class CardDetails extends Component {
                         </Grid>
                       </Row>
                       : null}
+
+                    {/* MEDIA */}
                     {this.state.activeWindow == "2" ?
                       <Row>
                         <Grid>
@@ -365,6 +372,8 @@ class CardDetails extends Component {
                         </Grid>
                       </Row>
                       : null}
+
+                    {/* SHARE */}
                     {this.state.activeWindow == "3" ?
                       <Row style={{ marginTop: 41.5 }}>
                         <Grid>
@@ -439,6 +448,8 @@ class CardDetails extends Component {
                         </Grid>
                       </Row>
                       : null}
+
+
                   </Grid>
                 </Row>
               </Grid>
