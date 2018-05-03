@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { StyleSheet, Image, TouchableHighlight, FlatList, Dimensions, Modal, Platform } from 'react-native';
+import { StyleSheet, Image, TouchableHighlight, FlatList, Dimensions, Modal, Platform, TextInput } from 'react-native';
 import GridView from "react-native-easy-grid-view";
 import { Col, Row, Grid } from "react-native-easy-grid";
 import Entypo from '@expo/vector-icons/Entypo';
@@ -107,9 +107,7 @@ class CardDetails extends Component {
   render() {
 
     if (this.state.fontLoaded) {
-      const image_url_array = this.props.details.image_urls;
-      const image_urls = image_url_array[0];
-      let image_content = <Image resizeMode='cover' source={{ uri: image_urls }} style={styles.listimage} />;
+      let image_content = <Image resizeMode='cover' source={{ uri: this.props.details.featured_image_url }} style={styles.listimage} />;
       return (
         <Container style={styles.container}>
           <Grid>
@@ -117,15 +115,15 @@ class CardDetails extends Component {
               <Content style={styles.header}>
                 <Grid>
                   <Col>
-                    { Platform.OS === 'ios' ?
-                    <TouchableHighlight onPress={() => { Actions.pop(); }}>
-                      <LinearGradient start={{ x: 0.0, y: 0.25 }} end={{ x: 0.5, y: 1.0 }}
-                        locations={[0, 0.6, 1]}
-                        colors={['rgb(1,123,125)', 'rgb(3,55,55)', 'rgb(3,35,35)']} style={styles.back_button}>
-                        <Entypo name='chevron-left' size={35} color="#FFFFFF" />
-                      </LinearGradient>
-                    </TouchableHighlight>
-                    : null }
+                    {Platform.OS === 'ios' ?
+                      <TouchableHighlight onPress={() => { Actions.pop(); }}>
+                        <LinearGradient start={{ x: 0.0, y: 0.25 }} end={{ x: 0.5, y: 1.0 }}
+                          locations={[0, 0.6, 1]}
+                          colors={['rgb(1,123,125)', 'rgb(3,55,55)', 'rgb(3,35,35)']} style={styles.back_button}>
+                          <Entypo name='chevron-left' size={35} color="#FFFFFF" />
+                        </LinearGradient>
+                      </TouchableHighlight>
+                      : null}
                   </Col>
                   <Col>
                     <Image source={logoimage} style={styles.logo} />
@@ -209,20 +207,20 @@ class CardDetails extends Component {
                           <Row>
                             <View style={{ flex: 1, marginLeft: 15, marginRight: 16 }}>
                               <View style={{ height: 156, backgroundColor: '#FFFFFF' }}>
-                                  <MapView
-                                      style={{ flex: 1 }}
-                                      initialRegion={{
-                                          latitude: 38.7504664,
-                                          longitude: -105.1757747,
-                                          latitudeDelta: 2.2922,
-                                          longitudeDelta: 2.2421
-                                      }} >
-                                      <MapView.Marker
-                                          coordinate={{latitude: 38.7504664, longitude: -105.1757747}}
-                                          title={'Wildwood Casino'}
-                                          description={'119 N Fifth St, Cripple Creek, CO 80813'}
-                                      />
-                                  </MapView>
+                                <MapView
+                                  style={{ flex: 1 }}
+                                  initialRegion={{
+                                    latitude: 38.7504664,
+                                    longitude: -105.1757747,
+                                    latitudeDelta: 2.2922,
+                                    longitudeDelta: 2.2421
+                                  }} >
+                                  <MapView.Marker
+                                    coordinate={{ latitude: 38.7504664, longitude: -105.1757747 }}
+                                    title={'Wildwood Casino'}
+                                    description={'119 N Fifth St, Cripple Creek, CO 80813'}
+                                  />
+                                </MapView>
                               </View>
                               <Text style={{ marginTop: 10, fontSize: 15, fontFamily: 'Montserrat-Bold', color: '#FFFFFF' }}>Where</Text>
                               <Text style={{ marginTop: 10, fontSize: 14, fontFamily: 'Montserrat-Medium', color: '#FFFFFF' }}>Lorem Imspum Bar elit. Sed gravida dolor nec tortor condimentum, et tincidunt arcu eleifend.</Text>
