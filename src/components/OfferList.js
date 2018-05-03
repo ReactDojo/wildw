@@ -17,10 +17,7 @@ class OfferList extends Component {
   _keyExtractor = item => item.id;
 
   _renderItem = ({ item }) => {
-
-    const image_url_array = item.image_urls;
-    const image_urls = image_url_array[0];
-    let image_content = <Image resizeMode='cover' source={{ uri: image_urls }} style={styles.listimage} />;
+    let image_content = <Image resizeMode='cover' source={{ uri: item.featured_image_url }} style={styles.listimage} />;
     if (this.props.randomoffer.isFetching) {
       image_content = <Image resizeMode='cover' source={dumpimage} style={styles.listimage} />;
     }
