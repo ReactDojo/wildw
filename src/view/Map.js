@@ -13,7 +13,7 @@ import MyOfferList from '../components/MyOfferList';
 import MyOfferReddemList from '../components/MyOfferReddemList';
 import { LinearGradient } from 'expo';
 import Feather from '@expo/vector-icons/Entypo';
-import QRCode from 'react-native-qrcode';
+//import QRCode from 'react-native-qrcode';
 import { fetchUserQRCode } from '../redux/actions/OfferActions';
 import { connect } from 'react-redux';
 import SVGImage from 'react-native-remote-svg'

@@ -398,7 +398,6 @@ export const fetchAvailableOffers = () => {
             const token = await AsyncStorage.getItem('token');
             const user_id = await AsyncStorage.getItem('user_id');
             const url = REQUEST_URL + '/api/users/' + user_id + '/offers';
-
             let requestConfig = {
                 method: "GET",
                 headers: {
@@ -407,10 +406,8 @@ export const fetchAvailableOffers = () => {
                     'Content-Type': 'application/json'
                 }
             }
-
             let respond = await fetch(url, requestConfig);
             let json = await respond.json();
-
             dispatch(fetchAvailableOffersSuccess(json));
         } 
         catch (error) {
@@ -431,12 +428,12 @@ export const fetchAvailableStoresFailure = (error) => ({
     payload: error
 });
 
-export const fetchAvailableStores = () => {
+export const fetchOfferStore = (offer_id) => {
     return async dispatch => {
         try {
             const token = await AsyncStorage.getItem('token');
-            const user_id = await AsyncStorage.getItem('user_id');
-            const url = REQUEST_URL + '/api/offers/' + offer_id + '/store';
+            //const user_id = await AsyncStorage.getItem('user_id');
+            const url = REQUEST_URL + '/api/Offers/' + offer_id + '/store';
 
             let requestConfig = {
                 method: "GET",

@@ -25,7 +25,7 @@ import OfferList from '../components/OfferList';
 import CategoryList from '../components/CategoryList';
 import SearchList from '../components/SearchList';
 import * as Progress from 'react-native-progress';
-class Usercard extends Component<{}> {
+class Usercard extends Component {
   constructor(props) {
     super(props);
     this.search = this.search.bind(this);
