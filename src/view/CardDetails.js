@@ -16,7 +16,7 @@ import { Font } from 'expo';
 import { Linking, Share, Alert } from 'react-native';
 import { postOfferToUser } from '../redux/actions/OfferActions';
 import { connect } from 'react-redux';
-import { MapView } from 'expo';
+import { MapView, Video } from 'expo';
 import { Marker } from 'react-native-maps';
 import moment from 'moment';
 
@@ -338,6 +338,9 @@ class CardDetails extends Component {
                         <Grid>
                           <Row>
                             <View style={{ flex: 1 }}>
+                              {this.props.details.video_url !== "" ?
+                                <Video source={{ uri: this.props.details.video_url }} useNativeControls={true} style={{ left: 18, width: 86.5, height: 86 }} />
+                                : null}
                               <FlatList
                                 data={this.state.images_array}
                                 numColumns={3}
