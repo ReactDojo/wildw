@@ -13,16 +13,13 @@ import { Actions } from 'react-native-router-flux';
 import Gallery from 'react-native-image-gallery';
 import HeaderBar from '../components/HeaderBar';
 import { Font } from 'expo';
-<<<<<<< HEAD
 import { Linking, Share, Alert } from 'react-native';
-=======
 import { postOfferToUser } from '../redux/actions/OfferActions';
 import { connect } from 'react-redux';
 import { MapView } from 'expo';
 import { Marker } from 'react-native-maps';
 import moment from 'moment';
 
->>>>>>> 22aeddbeacd405e34d2e8b634f4d3778cffe51a3
 const { width, height } = Dimensions.get('window');
 const equalWidth = (width - 116) / 3;
 
@@ -46,15 +43,12 @@ class CardDetails extends Component {
 
     this._openGallery = this._openGallery.bind(this);
     this._toggleGallery = this._toggleGallery.bind(this);
-<<<<<<< HEAD
     this.shareOnFacebook = this.shareOnFacebook.bind(this);
     this.shareOnTwitter = this.shareOnTwitter.bind(this);
     this.shareOnEmailwithSMS = this.shareOnEmailwithSMS.bind(this);
     this.shareOnEmail = this.shareOnEmail.bind(this);
     this.shareOnSMS = this.shareOnSMS.bind(this);
-=======
     this._saveOfferToUser = this._saveOfferToUser.bind(this);
->>>>>>> 22aeddbeacd405e34d2e8b634f4d3778cffe51a3
   }
 
   _keyExtractor = (item, index) => index.toString();
