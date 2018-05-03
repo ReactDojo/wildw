@@ -1,10 +1,10 @@
 import React, { Component } from 'react';
-import { StyleSheet, Image, TouchableHighlight, FlatList, Dimensions, Modal } from 'react-native';
+import { StyleSheet, Image, TouchableHighlight, FlatList, Dimensions, Modal, Platform } from 'react-native';
 import GridView from "react-native-easy-grid-view";
 import { Col, Row, Grid } from "react-native-easy-grid";
 import Entypo from '@expo/vector-icons/Entypo';
 import Foundation from '@expo/vector-icons/Foundation';
-import { Container, Header, Content, Tab, Tabs, TabHeading, Form, Item, Input, Label, Button, Text, Thumbnail, Icon, Right, Left, Body, View, Card, CardItem, List, ListItem } from 'native-base';
+import { Container, Header, Content, Tab, Tabs, TabHeading, Form, Item, Input, Label, Button, Text, Thumbnail, Icon, Right, Left, Body, View, Card, CardItem, List, ListItem, Toast } from 'native-base';
 import dumpimage from '../images/dump.jpg';
 import logoimage from '../images/logoimage.png';
 import styles from '../styles/carddetails';
@@ -13,11 +13,20 @@ import { Actions } from 'react-native-router-flux';
 import Gallery from 'react-native-image-gallery';
 import HeaderBar from '../components/HeaderBar';
 import { Font } from 'expo';
+<<<<<<< HEAD
 import { Linking, Share, Alert } from 'react-native';
+=======
+import { postOfferToUser } from '../redux/actions/OfferActions';
+import { connect } from 'react-redux';
+import { MapView } from 'expo';
+import { Marker } from 'react-native-maps';
+import moment from 'moment';
+
+>>>>>>> 22aeddbeacd405e34d2e8b634f4d3778cffe51a3
 const { width, height } = Dimensions.get('window');
 const equalWidth = (width - 116) / 3;
 
-export default class CardDetails extends Component {
+class CardDetails extends Component {
 
   constructor(props) {
     super(props);
@@ -37,11 +46,15 @@ export default class CardDetails extends Component {
 
     this._openGallery = this._openGallery.bind(this);
     this._toggleGallery = this._toggleGallery.bind(this);
+<<<<<<< HEAD
     this.shareOnFacebook = this.shareOnFacebook.bind(this);
     this.shareOnTwitter = this.shareOnTwitter.bind(this);
     this.shareOnEmailwithSMS = this.shareOnEmailwithSMS.bind(this);
     this.shareOnEmail = this.shareOnEmail.bind(this);
     this.shareOnSMS = this.shareOnSMS.bind(this);
+=======
+    this._saveOfferToUser = this._saveOfferToUser.bind(this);
+>>>>>>> 22aeddbeacd405e34d2e8b634f4d3778cffe51a3
   }
 
   _keyExtractor = (item, index) => index.toString();
@@ -52,6 +65,18 @@ export default class CardDetails extends Component {
 
   _openGallery() {
     this._toggleGallery();
+  }
+
+  _saveOfferToUser() {
+    Actions.pop();
+    this.props.postOfferToUser(this.props.details);
+    Toast.show({
+      text: 'Your offer has been saved. Go to myOffers to redeem this when visiting the cashier station.',
+      buttonText: 'Dismiss',
+      position: "top",
+      type: "success",
+      duration: 10000
+    })
   }
 
   renderRowItem = ({ item }) => {
@@ -170,8 +195,8 @@ export default class CardDetails extends Component {
     });
   }
   render() {
-    
-    if(this.state.fontLoaded){
+
+    if (this.state.fontLoaded) {
       const image_url_array = this.props.details.image_urls;
       const image_urls = image_url_array[0];
       let image_content = <Image resizeMode='cover' source={{ uri: image_urls }} style={styles.listimage} />;
@@ -179,7 +204,25 @@ export default class CardDetails extends Component {
         <Container style={styles.container}>
           <Grid>
             <Row style={{ height: 74 }}>
-              <HeaderBar />
+              <Content style={styles.header}>
+                <Grid>
+                  <Col>
+                    { Platform.OS === 'ios' ?
+                    <TouchableHighlight onPress={() => { Actions.pop(); }}>
+                      <LinearGradient start={{ x: 0.0, y: 0.25 }} end={{ x: 0.5, y: 1.0 }}
+                        locations={[0, 0.6, 1]}
+                        colors={['rgb(1,123,125)', 'rgb(3,55,55)', 'rgb(3,35,35)']} style={styles.back_button}>
+                        <Entypo name='chevron-left' size={35} color="#FFFFFF" />
+                      </LinearGradient>
+                    </TouchableHighlight>
+                    : null }
+                  </Col>
+                  <Col>
+                    <Image source={logoimage} style={styles.logo} />
+                  </Col>
+                  <Col ></Col>
+                </Grid>
+              </Content>
             </Row>
             <Row>
               <Grid>
@@ -217,15 +260,24 @@ export default class CardDetails extends Component {
                         <Grid>
                           <Row>
                             <View style={{ flex: 1, marginLeft: 19, marginRight: 25 }}><Text style={{ fontSize: 30, color: '#FFFFFF', fontFamily: 'Montserrat-Medium' }}>{this.props.details.name}</Text>
-                              <Text style={{ fontSize: 15, marginTop: 14, color: '#FFFFFF', lineHeight: 18 }}>Description</Text>
+                              <Text style={{ fontSize: 15, marginTop: 14, color: '#FFFFFF', lineHeight: 18, fontWeight: 'bold' }}>Description</Text>
                               <Text style={{ fontSize: 14, color: '#FFFFFF', fontFamily: 'Montserrat-Medium', lineHeight: 18 }}>{this.props.details.description}</Text>
+
+                              <Text style={{ fontSize: 15, marginTop: 14, color: '#FFFFFF', lineHeight: 18, fontWeight: 'bold' }}>Story</Text>
+                              <Text style={{ fontSize: 14, color: '#FFFFFF', fontFamily: 'Montserrat-Medium', lineHeight: 18 }}>{this.props.details.story}</Text>
+
+                              <Text style={{ fontSize: 15, marginTop: 14, color: '#FFFFFF', lineHeight: 18, fontWeight: 'bold' }}>Expiration</Text>
+                              <Text style={{ fontSize: 14, color: '#FFFFFF', fontFamily: 'Montserrat-Medium', lineHeight: 18 }}>{moment(this.props.details.end_date).format('MMMM Do YYYY, h:mm:ss a')}</Text>
+
+                              <Text style={{ fontSize: 15, marginTop: 14, color: '#FFFFFF', lineHeight: 18, fontWeight: 'bold' }}>Fine Print</Text>
+                              <Text style={{ fontSize: 14, color: '#FFFFFF', fontFamily: 'Montserrat-Medium', lineHeight: 18 }}>This offer is a {this.props.details.pricing} and it is valid from {moment(this.props.details.start_date).format('MMM Do YYYY')} to {moment(this.props.details.end_date).format('MMM Do YYYY')}. It's price is ${this.props.details.original_price} for ${this.props.details.sale_price}. The estimated value is ${this.props.details.perceived_value}</Text>
                             </View>
                           </Row>
                           <Row style={{ height: 104 }}>
                             <Grid>
                               <Col></Col>
                               <Col style={{ width: 165 }}>
-                                <TouchableHighlight style={{ borderRadius: 8 }}>
+                                <TouchableHighlight style={{ borderRadius: 8 }} onPress={this._saveOfferToUser}>
                                   <LinearGradient
                                     start={{ x: 0.0, y: 0.25 }}
                                     end={{ x: 0.5, y: 1.0 }}
@@ -246,7 +298,22 @@ export default class CardDetails extends Component {
                         <Grid>
                           <Row>
                             <View style={{ flex: 1, marginLeft: 15, marginRight: 16 }}>
-                              <View style={{ height: 156, backgroundColor: '#FFFFFF' }}></View>
+                              <View style={{ height: 156, backgroundColor: '#FFFFFF' }}>
+                                  <MapView
+                                      style={{ flex: 1 }}
+                                      initialRegion={{
+                                          latitude: 38.7504664,
+                                          longitude: -105.1757747,
+                                          latitudeDelta: 2.2922,
+                                          longitudeDelta: 2.2421
+                                      }} >
+                                      <MapView.Marker
+                                          coordinate={{latitude: 38.7504664, longitude: -105.1757747}}
+                                          title={'Wildwood Casino'}
+                                          description={'119 N Fifth St, Cripple Creek, CO 80813'}
+                                      />
+                                  </MapView>
+                              </View>
                               <Text style={{ marginTop: 10, fontSize: 15, fontFamily: 'Montserrat-Bold', color: '#FFFFFF' }}>Where</Text>
                               <Text style={{ marginTop: 10, fontSize: 14, fontFamily: 'Montserrat-Medium', color: '#FFFFFF' }}>Lorem Imspum Bar elit. Sed gravida dolor nec tortor condimentum, et tincidunt arcu eleifend.</Text>
                               <Text style={{ marginTop: 30, fontSize: 14, color: '#FFFFFF', fontFamily: 'Montserrat-Medium' }}>For help call: 290-123-9010</Text>
@@ -402,6 +469,9 @@ export default class CardDetails extends Component {
     }
     else
       return null;
- 
+
   }
 }
+
+
+export default connect(null, { postOfferToUser })(CardDetails)

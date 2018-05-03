@@ -17,13 +17,23 @@ import {
     FETCHING_SEARCH_REQUEST,
     FETCHING_SEARCH_SUCCESS,
     FETCHING_SEARCH_FAILURE,
+<<<<<<< HEAD
     FETCHING_ADD_HISTORY,
     FETCHING_GET_HISTORY,
     FETCHING_RESET_HISTORY
 
+=======
+    FETCHING_QRCODE_SUCCESS,
+    FETCHING_QRCODE_FAILURE,
+    POSTING_OFFER_TO_USER_SUCCESS,
+    POSTING_OFFER_TO_USER_FAILURE,
+    FETCHING_AVAILABLE_OFFERS_TO_USER_SUCCESS,
+    FETCHING_AVAILABLE_OFFERS_TO_USER_FAILURE
+>>>>>>> 22aeddbeacd405e34d2e8b634f4d3778cffe51a3
 } from './types';
 import { AsyncStorage } from 'react-native';
 import { Actions } from 'react-native-router-flux';
+import store from '../store';
 const REQUEST_URL = "https://offerbotapp.herokuapp.com";
 // offer list
 export const fetchingOfferRequest = () => ({ type: FETCHING_OFFER_REQUEST });
@@ -175,6 +185,8 @@ export const fetchLogin = (data) => {
             dispatch(fetchingLoginSuccess(json));
             dispatch(fetchOffer());
             dispatch(fetchCategory());
+            dispatch(fetchUserQRCode());
+            dispatch(fetchAvailableOffers());
             Actions.offerlist();
         }
         catch (error) {
@@ -261,6 +273,7 @@ export const fetchResetHistory = () =>{
         }
         catch(error){
 
+<<<<<<< HEAD
         }
        
     }
@@ -293,3 +306,122 @@ export const  fetchGetHistoryRequest = json => ({
     type: FETCHING_GET_HISTORY,
     payload: json
 })
+=======
+
+
+// user QR code
+export const fetchUserQRCodeSuccess = (json) => ({
+    type: FETCHING_QRCODE_SUCCESS,
+    payload: json
+});
+
+export const fetchUserQRCodeFailure = (error) => ({
+    type: FETCHING_QRCODE_FAILURE,
+    payload: error
+});
+
+export const fetchUserQRCode = () => {
+    return async dispatch => {
+        try {
+            const token = await AsyncStorage.getItem('token');
+            const user_id = await AsyncStorage.getItem('user_id');
+
+            let requestConfig = {
+                method: "GET",
+                headers: { 'Authorization': 'Bearer ' + token }
+            }
+
+            let url = REQUEST_URL + '/api/users/' + user_id + '/qrcodes';
+            let respond = await fetch(url, requestConfig);
+            let json = await respond.json();
+            let data = json[0];
+            
+            dispatch(fetchUserQRCodeSuccess(data));
+        }
+        catch (error) {
+            dispatch(fetchUserQRCodeFailure(error));
+        }
+    }
+}
+
+
+
+// Save Offer to User
+export const postOfferToUserSuccess = (json) => ({
+    type: POSTING_OFFER_TO_USER_SUCCESS,
+    payload: json
+});
+
+export const postOfferToUserFailure = (error) => ({
+    type: POSTING_OFFER_TO_USER_FAILURE,
+    payload: error
+});
+
+export const postOfferToUser = (offer) => {
+    return async dispatch => {
+        try {
+            const token = await AsyncStorage.getItem('token');
+            const user_id = await AsyncStorage.getItem('user_id');
+            const url = REQUEST_URL + '/api/users/' + user_id + '/offers';
+            delete offer.id;
+
+            let requestConfig = {
+                method: "POST",
+                headers: {
+                    'Authorization': 'Bearer ' + token,
+                    'Accept': 'application/json',
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(offer)
+            }
+
+            let respond = await fetch(url, requestConfig);
+            let json = await respond.json();
+            
+            dispatch(postOfferToUserSuccess(json));
+        }
+        catch (error) {
+            dispatch(postOfferToUserFailure(error));
+        }
+    }
+}
+
+
+// GET - Available Offers
+export const fetchAvailableOffersSuccess = (json) => ({
+    type: FETCHING_AVAILABLE_OFFERS_TO_USER_SUCCESS,
+    payload: json
+});
+
+export const fetchAvailableOffersFailure = (error) => ({
+    type: FETCHING_AVAILABLE_OFFERS_TO_USER_FAILURE,
+    payload: error
+});
+
+export const fetchAvailableOffers = () => {
+    return async dispatch => {
+        try {
+            const token = await AsyncStorage.getItem('token');
+            const user_id = await AsyncStorage.getItem('user_id');
+            const url = REQUEST_URL + '/api/users/' + user_id + '/offers';
+
+            let requestConfig = {
+                method: "GET",
+                headers: {
+                    'Authorization': 'Bearer ' + token,
+                    'Accept': 'application/json',
+                    'Content-Type': 'application/json'
+                }
+            }
+
+            let respond = await fetch(url, requestConfig);
+            let json = await respond.json();
+
+            dispatch(fetchAvailableOffersSuccess(json));
+        } 
+        catch (error) {
+            dispatch(fetchAvailableOffersFailure(error));
+        }
+    }
+}
+>>>>>>> 22aeddbeacd405e34d2e8b634f4d3778cffe51a3
