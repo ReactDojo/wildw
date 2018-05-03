@@ -40,7 +40,6 @@ module.exports = StyleSheet.create({
   },
 
   buttonText: {
-    fontFamily: 'Helvetica Neue',
     fontSize: 15,
     color: "#fff",
   },

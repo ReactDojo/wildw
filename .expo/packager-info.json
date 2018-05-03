@@ -1,8 +1,15 @@
 {
   "expoServerPort": 19000,
   "packagerPort": 19001,
+<<<<<<< HEAD
+  "packagerPid": 765,
+  "expoServerNgrokUrl": "https://gn-j8n.gabribram.wildwoodoffers-reactnative-branch.exp.direct",
+  "packagerNgrokUrl": "https://packager.gn-j8n.gabribram.wildwoodoffers-reactnative-branch.exp.direct",
+  "ngrokPid": 781
+=======
   "packagerPid": 45479,
   "expoServerNgrokUrl": "https://gn-j8n.chadder04.offbot-react-native.exp.direct",
   "packagerNgrokUrl": "https://packager.gn-j8n.chadder04.offbot-react-native.exp.direct",
   "ngrokPid": 45506
+>>>>>>> 22aeddbeacd405e34d2e8b634f4d3778cffe51a3
 }

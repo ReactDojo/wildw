@@ -13,12 +13,16 @@ import { Actions } from 'react-native-router-flux';
 import Gallery from 'react-native-image-gallery';
 import HeaderBar from '../components/HeaderBar';
 import { Font } from 'expo';
+<<<<<<< HEAD
+import { Linking, Share, Alert } from 'react-native';
+=======
 import { postOfferToUser } from '../redux/actions/OfferActions';
 import { connect } from 'react-redux';
 import { MapView } from 'expo';
 import { Marker } from 'react-native-maps';
 import moment from 'moment';
 
+>>>>>>> 22aeddbeacd405e34d2e8b634f4d3778cffe51a3
 const { width, height } = Dimensions.get('window');
 const equalWidth = (width - 116) / 3;
 
@@ -42,7 +46,15 @@ class CardDetails extends Component {
 
     this._openGallery = this._openGallery.bind(this);
     this._toggleGallery = this._toggleGallery.bind(this);
+<<<<<<< HEAD
+    this.shareOnFacebook = this.shareOnFacebook.bind(this);
+    this.shareOnTwitter = this.shareOnTwitter.bind(this);
+    this.shareOnEmailwithSMS = this.shareOnEmailwithSMS.bind(this);
+    this.shareOnEmail = this.shareOnEmail.bind(this);
+    this.shareOnSMS = this.shareOnSMS.bind(this);
+=======
     this._saveOfferToUser = this._saveOfferToUser.bind(this);
+>>>>>>> 22aeddbeacd405e34d2e8b634f4d3778cffe51a3
   }
 
   _keyExtractor = (item, index) => index.toString();
@@ -76,6 +88,7 @@ class CardDetails extends Component {
       </View>
     )
   }
+
   async componentDidMount() {
     try {
       await Font.loadAsync({
@@ -103,6 +116,83 @@ class CardDetails extends Component {
     } catch (error) {
       console.log(error);
     }
+  }
+
+  shareOnTwitter(){
+    // Share.share({
+    //   message: this.props.details.description,
+    //   url: 'http://bam.tech',
+    //   title: 'Share with wildsoodoffers'
+    // }, {
+    //   // Android only:
+    //   dialogTitle: 'Share with wildsoodoffers',
+    //   // iOS only:
+    //   excludedActivityTypes: [
+    //     'com.apple.UIKit.activity.PostToTwitter'
+    //   ]
+    // })
+    let text = 'Hi Nice too meet you!';
+    let send_url = 'www.google.com';
+    let url = 'https://twitter.com/intent/tweet?text=' + this.props.details.description + '&url=' + send_url;
+    Linking.openURL(url).then((data) => {
+      console.log('open whatsapp')
+    }).catch(() => {
+      console.log('App not installed')
+    });
+  }
+
+  shareOnFacebook(){
+    let text = 'Hi Nice too meet you!';
+    let send_url = 'www.google.com';
+    let url = 'facebook://profile';
+    Linking.openURL(url).then((data) => {
+      console.log('open whatsapp')
+    }).catch(() => {
+      Alert.alert('Not install facebook app please install!');
+    });
+    // Share.share({
+    //   message: this.props.details.description,
+    //   url: 'http://bam.tech',
+    //   title: 'Share with wildsoodoffers'
+    // }, {
+    //   // Android only:
+    //   dialogTitle: 'Share with wildsoodoffers',
+    //   // iOS only:
+    //   // excludedActivityTypes: [
+    //   //   'com.apple.UIKit.activity.PostToTwitter'
+    //   // ]
+    // })
+  }
+
+  shareOnEmailwithSMS(){
+    Share.share({
+      message: this.props.details.description,
+      url: 'http://bam.tech',
+      title: 'Share with wildsoodoffers'
+    }, {
+      // Android only:
+      dialogTitle: 'Share with wildsoodoffers',
+      // iOS only:
+      excludedActivityTypes: [
+        'com.apple.UIKit.activity.PostToTwitter'
+      ]
+    })
+  }
+  shareOnEmail(){
+    let url = 'mailto: support@expo.io?subject=Wildwoodoffers&body='+this.props.details.description;
+    Linking.openURL(url).then((data) => {
+      console.log('open whatsapp')
+    }).catch(() => {
+      Alert.alert('Not install mail app please install!');
+    });
+  }
+  shareOnSMS(){
+    let url = 'sms:+123456789?body='+this.props.details.description;
+    Linking.openURL(url).then((data) => {
+      
+    }).catch(() => {
+      Alert.alert('Not install sms app please install!');
+    });
   }
   render() {
 
@@ -288,7 +378,7 @@ class CardDetails extends Component {
                             <Grid>
                               <Col></Col>
                               <Col style={{ width: 165 }}>
-                                <TouchableHighlight underlayColor='rgb(11,148,150)' style={{ borderRadius: 8, alignSelf: 'center', }}>
+                                <TouchableHighlight onPress = { this.shareOnFacebook } underlayColor='rgb(11,148,150)' style={{ borderRadius: 8, alignSelf: 'center', }}>
                                   <LinearGradient
                                     start={{ x: 0.0, y: 0.25 }}
                                     end={{ x: 0.5, y: 1.0 }}
@@ -305,7 +395,7 @@ class CardDetails extends Component {
                             <Grid>
                               <Col></Col>
                               <Col style={{ width: 165 }}>
-                                <TouchableHighlight underlayColor='rgb(11,148,150)' style={{ borderRadius: 8 }}>
+                                <TouchableHighlight onPress = { this.shareOnTwitter } underlayColor='rgb(11,148,150)' style={{ borderRadius: 8 }}>
                                   <LinearGradient
                                     start={{ x: 0.0, y: 0.25 }}
                                     end={{ x: 0.5, y: 1.0 }}
@@ -322,7 +412,7 @@ class CardDetails extends Component {
                             <Grid>
                               <Col></Col>
                               <Col style={{ width: 165 }}>
-                                <TouchableHighlight underlayColor='rgb(11,148,150)' style={{ borderRadius: 8 }}>
+                                <TouchableHighlight onPress = { this.shareOnSMS } underlayColor='rgb(11,148,150)' style={{ borderRadius: 8 }}>
                                   <LinearGradient
                                     start={{ x: 0.0, y: 0.25 }}
                                     end={{ x: 0.5, y: 1.0 }}
@@ -339,7 +429,7 @@ class CardDetails extends Component {
                             <Grid>
                               <Col></Col>
                               <Col style={{ width: 165 }}>
-                                <TouchableHighlight underlayColor='rgb(11,148,150)' onPress={this.testingapi} style={{ borderRadius: 8 }}>
+                                <TouchableHighlight onPress = { this.shareOnEmail } underlayColor='rgb(11,148,150)'  style={{ borderRadius: 8 }}>
                                   <LinearGradient
                                     start={{ x: 0.0, y: 0.25 }}
                                     end={{ x: 0.5, y: 1.0 }}
@@ -362,6 +452,7 @@ class CardDetails extends Component {
           </Grid>
           <Modal
             visible={this.state.showGallery}
+            animationType = {'fade'}
             onRequestClose={() => this._toggleGallery()}>
             <View style={{ flex: 1 }} >
               <Gallery

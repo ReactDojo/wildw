@@ -10,19 +10,26 @@ import {
     FETCHING_SIGNUP_FAILURE,
     FETCHING_CATEGORY_REQUEST,
     FETCHING_CATEGORY_SUCCESS,
-    FETCHING_CATEGORY_FAILURE,
+    FECTHING_CATEGORY_FAILURE,
     FETCHING_OFFERBYCATEGORY_REQUEST,
     FETCHING_OFFERBYCATEGORY_SUCCESS,
     FETCHING_OFFERBYCATEGORY_FAILURE,
     FETCHING_SEARCH_REQUEST,
     FETCHING_SEARCH_SUCCESS,
     FETCHING_SEARCH_FAILURE,
+<<<<<<< HEAD
+    FETCHING_ADD_HISTORY,
+    FETCHING_GET_HISTORY,
+    FETCHING_RESET_HISTORY
+
+=======
     FETCHING_QRCODE_SUCCESS,
     FETCHING_QRCODE_FAILURE,
     POSTING_OFFER_TO_USER_SUCCESS,
     POSTING_OFFER_TO_USER_FAILURE,
     FETCHING_AVAILABLE_OFFERS_TO_USER_SUCCESS,
     FETCHING_AVAILABLE_OFFERS_TO_USER_FAILURE
+>>>>>>> 22aeddbeacd405e34d2e8b634f4d3778cffe51a3
 } from './types';
 import { AsyncStorage } from 'react-native';
 import { Actions } from 'react-native-router-flux';
@@ -221,7 +228,85 @@ export const fetchSignup = (data) => {
         }
     }
 }
+// history
+export const fetchAddHistory = (data) => {
+    return async  dispatch => {
+        try{
+            let json = {
+                name: data
+            };
+            
+            AsyncStorage.getItem('search', (err, keyword) => {
+                let histories = [];
+                if( keyword != null ){
+                    histories = JSON.parse(keyword);
+                    histories.unshift(json);
+                }
+                else{
+                    histories.unshift(json);
+                }
+                AsyncStorage.setItem('search',JSON.stringify(histories))
+                dispatch(fetchAddHistoryRequest(histories))
+            }
+            )
+        }
+        catch(error){
 
+
+        }
+        
+
+    };
+}
+
+export const fetchAddHistoryRequest = json =>({
+    type: FETCHING_ADD_HISTORY,
+    payload: json
+})
+
+export const fetchResetHistory = () =>{
+    return async  dispatch => {
+        try{
+            let json = [];
+            AsyncStorage.setItem('search',JSON.stringify(json))
+            dispatch(fetchResetHistoryRequest(json));
+        }
+        catch(error){
+
+<<<<<<< HEAD
+        }
+       
+    }
+}
+export const fetchResetHistoryRequest = json => ({
+    type: FETCHING_RESET_HISTORY,
+    payload: json
+})
+
+export const fetchGetHistory = () => {
+    return async  dispatch => {
+        try{
+            let histories = [];
+            AsyncStorage.getItem('search', (err,keyword) =>{
+            if(keyword != null){
+                histories = JSON.parse(keyword);
+            }
+            else {
+                histories = [];
+            }
+            dispatch(fetchGetHistoryRequest(histories))
+        })  
+        }
+        catch(error){
+        }
+    } 
+}
+
+export const  fetchGetHistoryRequest = json => ({
+    type: FETCHING_GET_HISTORY,
+    payload: json
+})
+=======
 
 
 // user QR code
@@ -339,3 +424,4 @@ export const fetchAvailableOffers = () => {
         }
     }
 }
+>>>>>>> 22aeddbeacd405e34d2e8b634f4d3778cffe51a3

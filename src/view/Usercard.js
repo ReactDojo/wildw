@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import {
-  StyleSheet, Image, TouchableHighlight,Modal,TextInput,ActivityIndicator
+  StyleSheet, Image, TouchableHighlight,Modal,TextInput,ActivityIndicator,AsyncStorage
 } from 'react-native';
 import Feather from '@expo/vector-icons/Entypo';
 import EvilIcons from '@expo/vector-icons/EvilIcons';
@@ -18,7 +18,7 @@ import logoimage from '../images/logoimage.png';
 import dumpimage from '../images/dump.jpg';
 import styles from '../styles/usercard';
 import { Actions } from 'react-native-router-flux';
-import {fetchOffer,fetchSearch} from '../redux/actions/OfferActions'; 
+import { fetchOffer, fetchSearch, fetchAddHistory, fetchResetHistory } from '../redux/actions/OfferActions'; 
 import {connect} from 'react-redux';
 import {bindActionCreators} from 'redux';
 import OfferList from '../components/OfferList';
@@ -28,21 +28,79 @@ import * as Progress from 'react-native-progress';
 class Usercard extends Component<{}> {
   constructor(props) {
     super(props);
-    this.gotocarddetails = this.gotocarddetails.bind(this);
-    this.closeModal = this.closeModal.bind(this);
-    this.state = {
-      searckeyword:''
-    };
     this.search = this.search.bind(this);
     this.search_all = this.search_all.bind(this);
-    this.state = { fontLoaded: false }; 
+    this.gotocarddetails = this.gotocarddetails.bind(this);
+    this.closeModal = this.closeModal.bind(this);
+    search_keyword = '';
+    history = '';
+    this.state = {
+      searckeyword:'',
+      fontLoaded: false
+    };
+    console.log('history_list',this.props.randomoffer.history);
+    // AsyncStorage.getItem('history', (err, token) => {
+    //   if (token != null){
+    //     this.history = token;
+    //     console.log('history_storage:',this.history);
+    //     AsyncStorage.getItem('keyword', (err,keyword) =>{
+    //       if(keyword !=null){
+    //         this.search_keyword = keyword;
+    //         console.log('keyword_storage:',this.search_keyword);
+    //         this.search_storate();
+    //         if(this.history == ''){
+    //           this.state = {
+    //             searckeyword:'',
+    //             search_start:'true',
+    //             fontLoaded: false
+    //           };
+    //         }
+    //         if(this.history == 'false'){
+    //           this.state = {
+    //             searckeyword:this.search_keyword,
+    //             search_start:this.history,
+    //             fontLoaded: false
+    //           };
+              
+    //           console.log('run_storage:',this.state.searckeyword)
+    //         }
+    //         else{
+    //           this.state = {
+    //             searckeyword:'',
+    //             search_start:'true',
+    //             fontLoaded: false
+    //           };
+    //         }
+    //         console.log('storage',this.search_keyword,this.history);  
+    //       }
+    //     })
+    //   }
+    // });
+    
+
+    
+
+    
   }
   search(){
-    console.log('search:',this.state.searckeyword);
+    // console.log('show:',this.state.search_start); 
+    // this.setState({search_start:'false'});
+    // console.log('search:',this.state.searckeyword);
     this.props.fetchSearch(this.state.searckeyword);
+    this.props.fetchAddHistory(this.state.searckeyword);
+    // AsyncStorage.setItem('history','false');
+    // AsyncStorage.setItem('keyword',this.state.searckeyword);
+    
+    // AsyncStorage.getItem('history', (err, token) => {
+    //   console.log('history_start:',token);  
+    // })
   }
+
   search_all(){
     this.props.fetchOffer();
+    this.props.fetchResetHistory();
+    // AsyncStorage.setItem('history','true');
+    // AsyncStorage.setItem('keyword','');
   }
   gotocarddetails() {
     Actions.offerdetails();
@@ -131,7 +189,7 @@ async componentDidMount() {
           </Grid>
           <Modal
                 visible={this.state.modalVisible}
-                animationType = {'slide'}
+                animationType = {'fade'}
                 onRequestClose = {() => this.closeModal()}
             >
             <Grid>
@@ -163,8 +221,12 @@ async componentDidMount() {
                             <Row style = {{height:80}}>
                               <Grid>
                                 <Col>
-                                  <TextInput placeholder = {'Be'} autoCapitalize = {'none'} placeholderTextColor={'#FFFFFF'} style = {{width:200, marginLeft:29, color:'#FFFFFF', fontSize:30, fontFamily:'Montserrat-SemiBold', marginTop:30, borderLeftColor:'#000000', borderTopColor:'#000000', borderRightColor:'#000000', borderBottomColor:'#FFFFFF', borderWidth: 1}}
-                                    onChangeText={(text) => this.setState({searckeyword:text})}
+                                  <TextInput placeholder = {''} autoCapitalize = {'none'} placeholderTextColor={'#FFFFFF'} style = {{width:200, marginLeft:29, color:'#FFFFFF', fontSize:30, fontFamily:'Montserrat-SemiBold', marginTop:30, borderLeftColor:'#000000', borderTopColor:'#000000', borderRightColor:'#000000', borderBottomColor:'#FFFFFF', borderWidth: 1}}
+                                    onChangeText={
+                                      (text) => (
+                                        this.setState({searckeyword:text}
+                                        ))
+                                    }
                                     value={this.state.searckeyword}/>  
                                 </Col>
                                 <Col>
@@ -216,7 +278,7 @@ function mapStateToProps(state, props) {
     randomoffer: state.OfferReducer
   }
 }
-export default connect(mapStateToProps, {fetchOffer,fetchSearch})(Usercard);
+export default connect(mapStateToProps, { fetchOffer, fetchSearch, fetchAddHistory, fetchResetHistory })(Usercard);
 
 
 

@@ -39,33 +39,33 @@ export default class Main extends Component<{}> {
     render() {
         return (
             <View style={{ flex: 1 }}>
-                <Router createReducer = {reducerCreate} getSceneStyle = {getSceneStyle}>
+                <Router createReducer={reducerCreate} getSceneStyle={getSceneStyle}>
                     <Scene key="root">
-                        <Scene key = "home" component = {Home} hideNavBar = {true} initial />
-                        <Scene key = "welcome" hideNavBar={true} hideTabBar panHandlers={null}
-                            schema = "modal" direction="vertical">
-                            <Scene key = "welcome-" component = {Welcome} title = "Welcome" initial = {true} panHandlers = {null} />
-                            <Scene key = "login" component = {Login} title = "Login" panHandlers = {null} />
-                            <Scene key = "register" component = {Register} title = "Register" panHandlers = {null} />
+                        <Scene key="home" component = {Home} hideNavBar={true} initial />
+                        <Scene key="welcome" hideNavBar={true} hideTabBar panHandlers={null}
+                            schema="modal" direction="vertical">
+                            <Scene key="welcome" component={Welcome} title="Welcome" initial={true} panHandlers={null} />
+                            <Scene key="login" component={Login} title="Login" panHandlers={null}/>
+                            <Scene key="register" component={Register} title="Register" panHandlers={null} />
                         </Scene>
-                        <Scene key="drawer" hideNavBar = {true} drawer contentComponent={SideBar} drawerWidth = {192}>
-                            <Scene key = "main" >
+                        <Scene key="drawer" hideNavBar={true} drawer contentComponent={SideBar} drawerWidth={192}>
+                            <Scene key="main" >
                                 <Scene
-                                    key = "offerlist"
-                                    hideNavBar = {true}
-                                    component = {Usercard}
+                                    key="offerlist"
+                                    hideNavBar={true}
+                                    component={Usercard}
                                     initial
                                 />
                                 
                                 <Scene
-                                    key = "offerdetails"
-                                    hideNavBar = {true}
-                                    component = {CardDetails}
+                                    key="offerdetails"
+                                    hideNavBar={true}
+                                    component={CardDetails}
                                 />
                                 <Scene
-                                    key = "myoffer"
-                                    hideNavBar = {true}
-                                    component = {MyOffer}
+                                    key="myoffer"
+                                    hideNavBar={true}
+                                    component={MyOffer}
                                 />
                                 <Scene
                                     key = "mycard"

@@ -40,14 +40,16 @@ export default class App extends React.Component {
     if (this.state.fontLoaded) {
       return(
         <Root/>
-      )
+      );
       
     }
-    else
-    return (
-      <Root/>
-   
-    );
+    else{
+      return (
+        <Text>Loading...</Text>
+     
+      );
+    }
+    
   }
 }
 
