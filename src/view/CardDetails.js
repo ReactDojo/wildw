@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { StyleSheet, Image, TouchableHighlight, FlatList, Dimensions, Modal, Platform, TextInput } from 'react-native';
+import { StyleSheet, Image, TouchableHighlight, FlatList, Dimensions, Modal, Platform, TextInput, ScrollView } from 'react-native';
 import GridView from "react-native-easy-grid-view";
 import { Col, Row, Grid } from "react-native-easy-grid";
 import Entypo from '@expo/vector-icons/Entypo';
@@ -16,9 +16,10 @@ import { Font } from 'expo';
 import { Linking, Share, Alert } from 'react-native';
 import { postOfferToUser } from '../redux/actions/OfferActions';
 import { connect } from 'react-redux';
-import { MapView, Video } from 'expo';
+import { MapView, Video, Location, Permissions } from 'expo';
 import { Marker } from 'react-native-maps';
 import moment from 'moment';
+import { fetchOfferStore } from '../redux/actions/OfferActions';
 
 const { width, height } = Dimensions.get('window');
 const equalWidth = (width - 116) / 3;
@@ -33,7 +34,11 @@ class CardDetails extends Component {
       activeWindow: "0",
       showGallery: false,
       images_array: this._formatImageArray(this.props.details.image_urls),
-      images_index: 0
+      images_index: 0,
+      location: {
+        latitude: 0,
+        longitude: 0
+      }
     }
 
     this._openGallery = this._openGallery.bind(this);
@@ -44,6 +49,12 @@ class CardDetails extends Component {
     this.shareOnEmail = this.shareOnEmail.bind(this);
     this.shareOnSMS = this.shareOnSMS.bind(this);
     this._saveOfferToUser = this._saveOfferToUser.bind(this);
+    this._getLocationAsync = this._getLocationAsync.bind(this);
+  }
+
+  async _getLocationAsync(address) {
+    let location = await Location.geocodeAsync(address);
+    return location;
   }
 
   _formatImageArray(input_array) {
@@ -62,6 +73,7 @@ class CardDetails extends Component {
   _openGallery() {
     this._toggleGallery();
   }
+  
 
   _saveOfferToUser() {
     Actions.pop();
@@ -108,10 +120,22 @@ class CardDetails extends Component {
         'Montserrat-ThinItalic': require('../../assets/fonts/Montserrat-ThinItalic.ttf'),
       });
       this.setState({ fontLoaded: true });
-      console.log('fonts are loaded');
+      const data = this.props.fetchOfferStore(this.props.details.id);
+      this.setState({
+        store: data
+      });
     } catch (error) {
       console.log(error);
     }
+  }
+
+  async componentWillReceiveProps() {
+    const { status } = await Permissions.askAsync(Permissions.LOCATION);
+      const address2 = this.props.store.address + ', ' + this.props.store.city + ', ' + this.props.store.state + this.props.store.zipcode;
+      const location = await this._getLocationAsync(address2);
+      this.setState({
+        location: location[0]
+      });
   }
 
   shareOnTwitter() {
@@ -191,7 +215,6 @@ class CardDetails extends Component {
     });
   }
   render() {
-
     if (this.state.fontLoaded) {
       let image_content = <Image resizeMode='cover' source={{ uri: this.props.details.featured_image_url }} style={styles.listimage} />;
       return (
@@ -249,11 +272,14 @@ class CardDetails extends Component {
                         </Col>
                       </Grid>
                     </Row>
+                    {/* DETAILS */}
                     {this.state.activeWindow == "0" ?
                       <Row>
                         <Grid>
                           <Row>
-                            <View style={{ flex: 1, marginLeft: 19, marginRight: 25 }}><Text style={{ fontSize: 30, color: '#FFFFFF', fontFamily: 'Montserrat-Medium' }}>{this.props.details.name}</Text>
+                            <View style={{ flex: 1, marginLeft: 19, marginRight: 25 }}>
+                              <Text style={{ fontSize: 30, color: '#FFFFFF', fontFamily: 'Montserrat-Medium' }}>{this.props.details.name}</Text>
+
                               <Text style={{ fontSize: 15, marginTop: 14, color: '#FFFFFF', lineHeight: 18, fontWeight: 'bold' }}>Description</Text>
                               <Text style={{ fontSize: 14, color: '#FFFFFF', fontFamily: 'Montserrat-Medium', lineHeight: 18 }}>{this.props.details.description}</Text>
 
@@ -287,52 +313,62 @@ class CardDetails extends Component {
                         </Grid>
                       </Row>
                       : null}
+
+                    {/* LOCATION */}
                     {this.state.activeWindow == "1" ?
                       <Row>
                         <Grid>
                           <Row>
-                            <View style={{ flex: 1, marginLeft: 15, marginRight: 16 }}>
-                              <View style={{ height: 156, backgroundColor: '#FFFFFF' }}>
+                            <ScrollView style={{ flex: 1, marginLeft: 15, marginRight: 16 }}>
+
+                              <Text style={{ fontSize: 15, fontFamily: 'Montserrat-Bold', color: '#fff' }}>Location:</Text>
+                              <Text style={{ marginTop: 5, fontSize: 15, color: '#fff' }}>{this.props.store.name}</Text>
+                              <Text style={{ fontSize: 15, color: '#fff' }}>{this.props.store.address}, {this.props.store.city}, {this.props.store.state} {this.props.store.zipcode}</Text>
+                              <Text style={{ fontSize: 15, color: '#fff' }}>{this.props.store.phone_number}</Text>
+
+                              <View style={{ marginTop: 10, height: 156 }}>
                                 <MapView
                                   style={{ flex: 1 }}
                                   initialRegion={{
-                                    latitude: 38.7504664,
-                                    longitude: -105.1757747,
+                                    latitude: this.state.location.latitude,
+                                    longitude: this.state.location.longitude,
                                     latitudeDelta: 2.2922,
                                     longitudeDelta: 2.2421
                                   }} >
                                   <MapView.Marker
-                                    coordinate={{ latitude: 38.7504664, longitude: -105.1757747 }}
-                                    title={'Wildwood Casino'}
-                                    description={'119 N Fifth St, Cripple Creek, CO 80813'}
+                                    coordinate={{ latitude: this.state.location.latitude, longitude: this.state.location.longitude }}
+                                    title={this.props.store.name}
+                                    description={this.props.store.address + ', ' + this.props.store.city + ', ' + this.props.store.state + this.props.store.zipcode}
                                   />
                                 </MapView>
                               </View>
-                              <Text style={{ marginTop: 10, fontSize: 15, fontFamily: 'Montserrat-Bold', color: '#FFFFFF' }}>Where</Text>
-                              <Text style={{ marginTop: 10, fontSize: 14, fontFamily: 'Montserrat-Medium', color: '#FFFFFF' }}>Lorem Imspum Bar elit. Sed gravida dolor nec tortor condimentum, et tincidunt arcu eleifend.</Text>
-                              <Text style={{ marginTop: 30, fontSize: 14, color: '#FFFFFF', fontFamily: 'Montserrat-Medium' }}>For help call: 290-123-9010</Text>
-                            </View>
-                          </Row>
-                          <Row style={{ height: 104 }}>
-                            <Grid>
-                              <Col></Col>
-                              <Col style={{ width: 165 }}>
-                                <TouchableHighlight underlayColor='rgb(11,148,150)' style={{ borderRadius: 8 }}>
-                                  <LinearGradient
-                                    start={{ x: 0.0, y: 0.25 }}
-                                    end={{ x: 0.5, y: 1.0 }}
-                                    locations={[0, 0.6, 1]}
-                                    colors={['rgb(1,123,125)', 'rgb(3,55,55)', 'rgb(3,35,35)']} style={styles.linearGradient}>
-                                    <Text style={{ color: '#FFFFFF', fontFamily: 'Montserrat-Bold', fontSize: 18, marginLeft: 36, marginTop: 18 }}>Save Offer</Text>
-                                  </LinearGradient>
-                                </TouchableHighlight>
-                              </Col>
-                              <Col></Col>
-                            </Grid>
+
+                              <Text style={{ marginTop: 10, fontSize: 15, fontFamily: 'Montserrat-Bold', color: '#FFFFFF' }}>Hours:</Text>
+                              <Text style={{ marginTop: 7, fontSize: 15, color: '#FFFFFF' }}>Sunday: {this.props.store.hours[0]} </Text>
+                              <Text style={{ fontSize: 15, color: '#fff' }}>Monday: {this.props.store.hours[1]}</Text>
+                              <Text style={{ fontSize: 15, color: '#fff' }}>Tuesday: {this.props.store.hours[2]} </Text>
+                              <Text style={{ fontSize: 15, color: '#fff' }}>Wednesday: {this.props.store.hours[3]}</Text>
+                              <Text style={{ fontSize: 15, color: '#fff' }}>Thursday: {this.props.store.hours[4]}</Text>
+                              <Text style={{ fontSize: 15, color: '#FFFFFF' }}>Friday: {this.props.store.hours[5]}</Text>
+                              <Text style={{ fontSize: 15, color: '#FFFFFF' }}>Saturday: {this.props.store.hours[6]}</Text>
+
+
+                              <TouchableHighlight underlayColor='rgb(11,148,150)' style={{ borderRadius: 8, marginBottom: 10 }}>
+                                <LinearGradient
+                                  start={{ x: 0.0, y: 0.25 }}
+                                  end={{ x: 0.5, y: 1.0 }}
+                                  locations={[0, 0.6, 1]}
+                                  colors={['rgb(1,123,125)', 'rgb(3,55,55)', 'rgb(3,35,35)']} style={styles.linearGradient}>
+                                  <Text style={{ color: '#FFFFFF', fontFamily: 'Montserrat-Bold', fontSize: 18, marginLeft: 36, marginTop: 18 }}>Save Offer</Text>
+                                </LinearGradient>
+                              </TouchableHighlight>
+                            </ScrollView>
                           </Row>
                         </Grid>
                       </Row>
                       : null}
+
+                    {/* MEDIA */}
                     {this.state.activeWindow == "2" ?
                       <Row>
                         <Grid>
@@ -370,6 +406,8 @@ class CardDetails extends Component {
                         </Grid>
                       </Row>
                       : null}
+
+                    {/* SHARE */}
                     {this.state.activeWindow == "3" ?
                       <Row style={{ marginTop: 41.5 }}>
                         <Grid>
@@ -446,9 +484,9 @@ class CardDetails extends Component {
                       : null}
                   </Grid>
                 </Row>
-              </Grid>
-            </Row>
-          </Grid>
+              </Grid >
+            </Row >
+          </Grid >
           <Modal
             visible={this.state.showGallery}
             animationType={'fade'}
@@ -461,7 +499,7 @@ class CardDetails extends Component {
               <Button style={{ position: 'absolute', top: 15, left: 15 }} onPress={this._toggleGallery} ><Text>Close</Text></Button>
             </View>
           </Modal>
-        </Container>
+        </Container >
       );
     }
     else
@@ -470,5 +508,10 @@ class CardDetails extends Component {
   }
 }
 
+function mapStateToProps(state, props) {
+  return {
+    store: state.OfferReducer.available_store
+  }
+}
 
-export default connect(null, { postOfferToUser })(CardDetails)
+export default connect(mapStateToProps, { postOfferToUser, fetchOfferStore })(CardDetails)

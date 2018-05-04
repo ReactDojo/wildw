@@ -25,7 +25,9 @@ import {
     POSTING_OFFER_TO_USER_SUCCESS,
     POSTING_OFFER_TO_USER_FAILURE,
     FETCHING_AVAILABLE_OFFERS_TO_USER_SUCCESS,
-    FETCHING_AVAILABLE_OFFERS_TO_USER_FAILURE
+    FETCHING_AVAILABLE_OFFERS_TO_USER_FAILURE,
+    FETCHING_AVAILABLE_STORE_FAILURE,
+    FETCHING_AVAILABLE_STORE_SUCCESS
 } from './types';
 import { AsyncStorage } from 'react-native';
 import { Actions } from 'react-native-router-flux';
@@ -398,6 +400,42 @@ export const fetchAvailableOffers = () => {
             const token = await AsyncStorage.getItem('token');
             const user_id = await AsyncStorage.getItem('user_id');
             const url = REQUEST_URL + '/api/users/' + user_id + '/offers';
+            let requestConfig = {
+                method: "GET",
+                headers: {
+                    'Authorization': 'Bearer ' + token,
+                    'Accept': 'application/json',
+                    'Content-Type': 'application/json'
+                }
+            }
+            let respond = await fetch(url, requestConfig);
+            let json = await respond.json();
+            dispatch(fetchAvailableOffersSuccess(json));
+        } 
+        catch (error) {
+            dispatch(fetchAvailableOffersFailure(error));
+        }
+    }
+}
+
+
+//GET Stores by Offer
+export const fetchAvailableStoresSuccess = (json) => ({
+    type: FETCHING_AVAILABLE_STORE_SUCCESS,
+    payload: json
+});
+
+export const fetchAvailableStoresFailure = (error) => ({
+    type: FETCHING_AVAILABLE_STORE_FAILURE,
+    payload: error
+});
+
+export const fetchOfferStore = (offer_id) => {
+    return async dispatch => {
+        try {
+            const token = await AsyncStorage.getItem('token');
+            //const user_id = await AsyncStorage.getItem('user_id');
+            const url = REQUEST_URL + '/api/Offers/' + offer_id + '/store';
 
             let requestConfig = {
                 method: "GET",
@@ -410,11 +448,11 @@ export const fetchAvailableOffers = () => {
 
             let respond = await fetch(url, requestConfig);
             let json = await respond.json();
-
-            dispatch(fetchAvailableOffersSuccess(json));
+            
+            dispatch(fetchAvailableStoresSuccess(json));
         } 
         catch (error) {
-            dispatch(fetchAvailableOffersFailure(error));
+            dispatch(fetchAvailableStoresFailure(error));
         }
     }
 }
