@@ -5,6 +5,7 @@ import {
     FETCHING_LOGIN_REQUEST,
     FETCHING_LOGIN_SUCCESS,
     FETCHING_LOGIN_FAILURE,
+    FETCHING_LOGIN_ERROR,
     FETCHING_SIGNUP_REQUEST,
     FETCHING_SIGNUP_SUCCESS,
     FETCHING_SIGNUP_FAILURE,
@@ -34,6 +35,7 @@ import { AsyncStorage } from 'react-native';
 const initialState = {
     isFetching: false,
     errorMessage: '',
+    errorAlertMessage: '',
     isloginFetching: false,
     issignupFetching: false,
     isloadingbycategory: false,
@@ -82,6 +84,9 @@ const OfferReducer = (state = initialState, action) => {
             return state;
         case FETCHING_CATEGORY_SUCCESS:
             state = Object.assign({}, state, { isFetching: false, category: action.payload });
+            return state;
+        case FETCHING_LOGIN_ERROR:
+            state = Object.assign({}, state, { isloginFetching: false, errorAlertMessage: action.payload });
             return state;
         case FETCHING_LOGIN_REQUEST:
             state = Object.assign({}, state, { isloginFetching: true })

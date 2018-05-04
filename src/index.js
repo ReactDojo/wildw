@@ -18,6 +18,7 @@ import Home from './view/start/home';
 import Welcome from './view/start/auth/welcome';
 import Login from './view/start/auth/login';
 import Register from './view/start/auth/register';
+import Password from './view/start/auth/password';
 import store from './redux/store';
 const getSceneStyle = (props, computedProps) => {
     const style = {
@@ -47,6 +48,7 @@ export default class Main extends Component<{}> {
                             <Scene key="welcome" component={Welcome} title="Welcome" initial={true} panHandlers={null} />
                             <Scene key="login" component={Login} title="Login" panHandlers={null}/>
                             <Scene key="register" component={Register} title="Register" panHandlers={null} />
+                            <Scene key="password" component={Password} title="Password" panHandlers={null}/>
                         </Scene>
                         <Scene key="drawer" hideNavBar={true} drawer contentComponent={SideBar} drawerWidth={192}>
                             <Scene key="main" >

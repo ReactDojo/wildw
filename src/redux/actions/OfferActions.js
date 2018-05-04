@@ -5,6 +5,7 @@ import {
     FETCHING_LOGIN_REQUEST,
     FETCHING_LOGIN_SUCCESS,
     FETCHING_LOGIN_FAILURE,
+    FETCHING_LOGIN_ERROR,
     FETCHING_SIGNUP_REQUEST,
     FETCHING_SIGNUP_SUCCESS,
     FETCHING_SIGNUP_FAILURE,
@@ -165,6 +166,12 @@ export const fetchingLoginFailure = error => ({
     type: FETCHING_LOGIN_FAILURE,
     payload: error
 });
+
+export const fetchingLoginError = error => ({
+    type: FETCHING_LOGIN_ERROR,
+    payload: error
+});
+
 export const fetchLogin = (data) => {
     return async dispatch => {
         dispatch(fetchingLoginRequest());
@@ -180,12 +187,16 @@ export const fetchLogin = (data) => {
             let url = REQUEST_URL + '/login';
             let respond = await fetch(url, requestConfig);
             let json = await respond.json();
-            dispatch(fetchingLoginSuccess(json));
-            dispatch(fetchOffer());
-            dispatch(fetchCategory());
-            dispatch(fetchUserQRCode());
-            dispatch(fetchAvailableOffers());
-            Actions.offerlist();
+            if (json && json.statusCode >= 400) {
+                dispatch(fetchingLoginError(json.description))
+            } else {
+                dispatch(fetchingLoginSuccess(json));
+                dispatch(fetchOffer());
+                dispatch(fetchCategory());
+                dispatch(fetchUserQRCode());
+                dispatch(fetchAvailableOffers());
+                Actions.offerlist();
+            }
         }
         catch (error) {
             dispatch(fetchingLoginFailure(error));
@@ -229,50 +240,50 @@ export const fetchSignup = (data) => {
 // history
 export const fetchAddHistory = (data) => {
     return async  dispatch => {
-        try{
+        try {
             let json = {
                 name: data
             };
-            
+
             AsyncStorage.getItem('search', (err, keyword) => {
                 let histories = [];
-                if( keyword != null ){
+                if (keyword != null) {
                     histories = JSON.parse(keyword);
                     histories.unshift(json);
                 }
-                else{
+                else {
                     histories.unshift(json);
                 }
-                AsyncStorage.setItem('search',JSON.stringify(histories))
+                AsyncStorage.setItem('search', JSON.stringify(histories))
                 dispatch(fetchAddHistoryRequest(histories))
             }
             )
         }
-        catch(error){
+        catch (error) {
 
 
         }
-        
+
 
     };
 }
 
-export const fetchAddHistoryRequest = json =>({
+export const fetchAddHistoryRequest = json => ({
     type: FETCHING_ADD_HISTORY,
     payload: json
 })
 
-export const fetchResetHistory = () =>{
+export const fetchResetHistory = () => {
     return async  dispatch => {
-        try{
+        try {
             let json = [];
-            AsyncStorage.setItem('search',JSON.stringify(json))
+            AsyncStorage.setItem('search', JSON.stringify(json))
             dispatch(fetchResetHistoryRequest(json));
         }
-        catch(error){
+        catch (error) {
 
         }
-       
+
     }
 }
 export const fetchResetHistoryRequest = json => ({
@@ -282,24 +293,24 @@ export const fetchResetHistoryRequest = json => ({
 
 export const fetchGetHistory = () => {
     return async  dispatch => {
-        try{
+        try {
             let histories = [];
-            AsyncStorage.getItem('search', (err,keyword) =>{
-            if(keyword != null){
-                histories = JSON.parse(keyword);
-            }
-            else {
-                histories = [];
-            }
-            dispatch(fetchGetHistoryRequest(histories))
-        })  
+            AsyncStorage.getItem('search', (err, keyword) => {
+                if (keyword != null) {
+                    histories = JSON.parse(keyword);
+                }
+                else {
+                    histories = [];
+                }
+                dispatch(fetchGetHistoryRequest(histories))
+            })
         }
-        catch(error){
+        catch (error) {
         }
-    } 
+    }
 }
 
-export const  fetchGetHistoryRequest = json => ({
+export const fetchGetHistoryRequest = json => ({
     type: FETCHING_GET_HISTORY,
     payload: json
 })
@@ -331,7 +342,7 @@ export const fetchUserQRCode = () => {
             let respond = await fetch(url, requestConfig);
             let json = await respond.json();
             let data = json[0];
-            
+
             dispatch(fetchUserQRCodeSuccess(data));
         }
         catch (error) {
@@ -373,7 +384,7 @@ export const postOfferToUser = (offer) => {
 
             let respond = await fetch(url, requestConfig);
             let json = await respond.json();
-            
+
             dispatch(postOfferToUserSuccess(json));
         }
         catch (error) {
@@ -411,7 +422,7 @@ export const fetchAvailableOffers = () => {
             let respond = await fetch(url, requestConfig);
             let json = await respond.json();
             dispatch(fetchAvailableOffersSuccess(json));
-        } 
+        }
         catch (error) {
             dispatch(fetchAvailableOffersFailure(error));
         }
@@ -448,9 +459,9 @@ export const fetchOfferStore = (offer_id) => {
 
             let respond = await fetch(url, requestConfig);
             let json = await respond.json();
-            
+
             dispatch(fetchAvailableStoresSuccess(json));
-        } 
+        }
         catch (error) {
             dispatch(fetchAvailableStoresFailure(error));
         }
