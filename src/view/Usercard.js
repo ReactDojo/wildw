@@ -146,7 +146,8 @@ async componentDidMount() {
   }
   render() {
     if (this.state.fontLoaded) {
-      let content = <OfferList offer={this.props.randomoffer.offer} />;
+      let offers = this.props.randomoffer.offer.filter(offer => offer.userId == "" || !offer.userId);
+      let content = <OfferList offer={offers} />;
       if (this.props.randomoffer.isFetching) {
         content = <Progress.Circle size={30} indeterminate={true} style={{flex:1,alignSelf: 'center',justifyContent: 'center',}}/>;
       }

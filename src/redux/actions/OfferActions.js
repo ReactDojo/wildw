@@ -25,7 +25,9 @@ import {
     POSTING_OFFER_TO_USER_SUCCESS,
     POSTING_OFFER_TO_USER_FAILURE,
     FETCHING_AVAILABLE_OFFERS_TO_USER_SUCCESS,
-    FETCHING_AVAILABLE_OFFERS_TO_USER_FAILURE
+    FETCHING_AVAILABLE_OFFERS_TO_USER_FAILURE,
+    FETCHING_AVAILABLE_STORE_FAILURE,
+    FETCHING_AVAILABLE_STORE_SUCCESS
 } from './types';
 import { AsyncStorage } from 'react-native';
 import { Actions } from 'react-native-router-flux';
@@ -446,7 +448,7 @@ export const fetchOfferStore = (offer_id) => {
 
             let respond = await fetch(url, requestConfig);
             let json = await respond.json();
-
+            
             dispatch(fetchAvailableStoresSuccess(json));
         } 
         catch (error) {
