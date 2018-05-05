@@ -25,6 +25,7 @@ import {
     FETCHING_QRCODE_FAILURE,
     POSTING_OFFER_TO_USER_SUCCESS,
     POSTING_OFFER_TO_USER_FAILURE,
+    POSTING_OFFER_TO_USER_PENDING,
     FETCHING_AVAILABLE_OFFERS_TO_USER_SUCCESS,
     FETCHING_AVAILABLE_OFFERS_TO_USER_FAILURE,
     FETCHING_AVAILABLE_STORE_FAILURE,
@@ -364,8 +365,14 @@ export const postOfferToUserFailure = (error) => ({
     payload: error
 });
 
+export const postOfferToUserPending = () => ({
+    type: POSTING_OFFER_TO_USER_PENDING,
+    payload: true
+});
+
 export const postOfferToUser = (offer) => {
     return async dispatch => {
+        dispatch(postOfferToUserPending());
         try {
             const token = await AsyncStorage.getItem('token');
             const user_id = await AsyncStorage.getItem('user_id');
