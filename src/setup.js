@@ -4,6 +4,8 @@ import { Provider } from 'react-redux';
 import store from './redux/store'; //Import the store
 import Main from './index';
 import { Root } from "native-base";
+import { Font } from 'expo';
+
 export default class Groot extends Component {
     async componentDidMount() {
         try {
