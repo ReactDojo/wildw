@@ -28,7 +28,9 @@ import {
     FETCHING_AVAILABLE_OFFERS_TO_USER_SUCCESS,
     FETCHING_AVAILABLE_OFFERS_TO_USER_FAILURE,
     FETCHING_AVAILABLE_STORE_SUCCESS,
-    FETCHING_AVAILABLE_STORE_FAILURE
+    FETCHING_AVAILABLE_STORE_FAILURE,
+    FETCHING_ALL_STORE_SUCCESS,
+    FETCHING_ALL_STORE_FAILURE
 } from '../actions/types';
 import { combineReducers } from 'redux';
 import { AsyncStorage } from 'react-native';
@@ -139,6 +141,12 @@ const OfferReducer = (state = initialState, action) => {
             state = Object.assign({}, state, { available_store: action.payload });
             return state;
         case FETCHING_AVAILABLE_STORE_FAILURE:
+            state = Object.assign({}, state, { errorMessage: action.payload });
+            return state;
+        case FETCHING_ALL_STORE_SUCCESS:
+            state = Object.assign({}, state, { all_stores: action.payload });
+            return state;
+        case FETCHING_ALL_STORE_FAILURE:
             state = Object.assign({}, state, { errorMessage: action.payload });
             return state;
         default:

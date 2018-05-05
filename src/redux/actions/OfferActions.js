@@ -28,7 +28,10 @@ import {
     FETCHING_AVAILABLE_OFFERS_TO_USER_SUCCESS,
     FETCHING_AVAILABLE_OFFERS_TO_USER_FAILURE,
     FETCHING_AVAILABLE_STORE_FAILURE,
-    FETCHING_AVAILABLE_STORE_SUCCESS
+    FETCHING_AVAILABLE_STORE_SUCCESS,
+    FETCHING_ALL_STORE_SUCCESS,
+    FETCHING_ALL_STORE_FAILURE
+
 } from './types';
 import { AsyncStorage } from 'react-native';
 import { Actions } from 'react-native-router-flux';
@@ -464,6 +467,49 @@ export const fetchOfferStore = (offer_id) => {
         }
         catch (error) {
             dispatch(fetchAvailableStoresFailure(error));
+        }
+    }
+}
+
+
+
+
+
+//GET All Stores
+export const fetchAllStoresSuccess = (json) => ({
+    type: FETCHING_ALL_STORE_SUCCESS,
+    payload: json
+});
+
+export const fetchAllStoresFailure = (error) => ({
+    type: FETCHING_ALL_STORE_FAILURE,
+    payload: error
+});
+
+export const fetchAllStore = () => {
+    return async dispatch => {
+        try {
+            const token = await AsyncStorage.getItem('token');
+            //const user_id = await AsyncStorage.getItem('user_id');
+            const url = REQUEST_URL + '/api/Stores';
+
+            let requestConfig = {
+                method: "GET",
+                headers: {
+                    'Authorization': 'Bearer ' + token,
+                    'Accept': 'application/json',
+                    'Content-Type': 'application/json'
+                }
+            }
+
+            let respond = await fetch(url, requestConfig);
+            let json = await respond.json();
+            console.log('json ',json);
+
+            dispatch(fetchAllStoresSuccess(json));
+        }
+        catch (error) {
+            dispatch(fetchAllStoresFailure(error));
         }
     }
 }

@@ -17,16 +17,93 @@ import Feather from '@expo/vector-icons/Entypo';
 import { fetchUserQRCode } from '../redux/actions/OfferActions';
 import { connect } from 'react-redux';
 import SVGImage from 'react-native-remote-svg'
-import { MapView } from 'expo';
+import { MapView, Video, Location, Permissions } from 'expo';
 import { Marker } from 'react-native-maps';
+import { fetchAllStore } from '../redux/actions/OfferActions';
 
 class Map extends Component {
 
     constructor(props) {
         super(props);
+
+        this.state = {
+            stores: [],
+            markers: []
+        };
+
+        this.getLatLong = this.getLatLong.bind(this);
+        this.getMarkers = this.getMarkers.bind(this);
+        //this.mapMarkers = this.mapMarkers.bind(this);
+    }
+
+    async componentDidMount() {
+        this.getMarkers();
+        // const data = this.props.fetchAllStore();
+    }
+
+    async _getLocationAsync(address) {
+        let location = await Location.geocodeAsync(address);
+        return location;
+    }
+
+    async getLatLong(store) {
+        const { status } = await Permissions.askAsync(Permissions.LOCATION);
+        const address2 = store.address + ', ' + store.city + ', ' + store.state + store.zipcode;
+        const location = await this._getLocationAsync(address2);
+        return location;
+    }
+
+
+    async getMarkers() {
+        const mark = this.props.all_stores.map(
+            (store, index) => {
+                const data = store;
+                var obj = this.getLatLong(data);
+                console.log('obj', obj);
+                console.log('store', store);
+                return Object.assign({store: store, coord: obj});
+            }
+        );
+
+        
+        Promise.all(mark).then((value) =>{
+            console.log(value);
+            var x = value.map(
+                (store, index) => {
+                    console.log('store ', store);
+                    return (
+                        <MapView.Marker
+                            key={index + ' marker'}
+                            coordinate={{ latitude: store.coord.latitude, longitude: store.coord.longitude }}
+                            title={'Wildwood Casino'}
+                            description={'119 N Fifth St, Cripple Creek, CO 80813'}
+                        />
+                    )
+                }
+            );
+            this.setState({
+                markers: x,
+            });
+        }
+        )
+        // this.setState({
+        //     markers: value,
+        // })
+        //console.log(this.state.markers);
     }
 
     render() {
+        //console.log(this.props.all_stores);
+
+        
+        var markbool = false;
+        //var mark = this.mapMarkers();
+
+        // if(mark.length > 0){
+        //     markbool = true;
+        // }
+        //console.log('markers ', mark);
+
         return (
             <Container style={styles.container}>
                 <Grid>
@@ -50,11 +127,12 @@ class Map extends Component {
                                 latitudeDelta: 0.0922,
                                 longitudeDelta: 0.0421,
                             }} >
-                            <MapView.Marker
+                            {/* <MapView.Marker
                                 coordinate={{ latitude: 38.7504664, longitude: -105.1757747 }}
                                 title={'Wildwood Casino'}
                                 description={'119 N Fifth St, Cripple Creek, CO 80813'}
-                            />
+                            /> */}
+                            {this.state.markers}
                         </MapView>
                     </Row>
                     <Row style={{ height: 150, padding: 15 }}>
@@ -85,8 +163,9 @@ class Map extends Component {
 
 function mapStateToProps(state, props) {
     return {
-        map_url: ''
+        map_url: '',
+        all_stores: state.OfferReducer.all_stores
     }
 }
 
-export default connect(mapStateToProps)(Map);
+export default connect(mapStateToProps, { fetchAllStore })(Map);
