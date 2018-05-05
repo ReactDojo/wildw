@@ -50,12 +50,12 @@ export const fetchOffer = () => {
         dispatch(fetchingOfferRequest());
         try {
             const value = await AsyncStorage.getItem('token');
-            console.log('mytoken:', value);
+            
             let requestConfig = {
                 method: "GET",
                 headers: { 'Authorization': 'Bearer ' + value }
             };
-            let url = REQUEST_URL + '/api/Offers';
+            let url = REQUEST_URL + '/api/Offers?filter={"where":{"userId": {"exists": false}}}';
             let respond = await fetch(url, requestConfig);
             let json = await respond.json();
             dispatch(fetchingOfferSuccess(json));
