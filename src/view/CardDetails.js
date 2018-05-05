@@ -4,7 +4,7 @@ import GridView from "react-native-easy-grid-view";
 import { Col, Row, Grid } from "react-native-easy-grid";
 import Entypo from '@expo/vector-icons/Entypo';
 import Foundation from '@expo/vector-icons/Foundation';
-import { Container, Header, Content, Tab, Tabs, TabHeading, Form, Item, Input, Label, Button, Text, Thumbnail, Icon, Right, Left, Body, View, Card, CardItem, List, ListItem, Toast } from 'native-base';
+import { Container, Header, Content, Tab, Tabs, TabHeading, Form, Item, Input, Label, Button, Text, Thumbnail, Icon, Right, Left, Body, View, Card, CardItem, List, ListItem, Toast, Spinner } from 'native-base';
 import dumpimage from '../images/dump.jpg';
 import logoimage from '../images/logoimage.png';
 import styles from '../styles/carddetails';
@@ -73,18 +73,20 @@ class CardDetails extends Component {
   _openGallery() {
     this._toggleGallery();
   }
-  
+
 
   _saveOfferToUser() {
-    Actions.pop();
     this.props.postOfferToUser(this.props.details);
-    Toast.show({
-      text: 'Your offer has been saved. Go to myOffers to redeem this when visiting the cashier station.',
-      buttonText: 'Dismiss',
-      position: "top",
-      type: "success",
-      duration: 10000
-    })
+    setTimeout(() => {
+      Actions.pop();
+      Toast.show({
+        text: 'Your offer has been saved. Go to myOffers to redeem this when visiting the cashier station.',
+        buttonText: 'Dismiss',
+        position: "top",
+        type: "success",
+        duration: 10000
+      })
+    }, 2000);
   }
 
   renderRowItem = ({ item }) => {
@@ -131,11 +133,11 @@ class CardDetails extends Component {
 
   async componentWillReceiveProps() {
     const { status } = await Permissions.askAsync(Permissions.LOCATION);
-      const address2 = this.props.store.address + ', ' + this.props.store.city + ', ' + this.props.store.state + this.props.store.zipcode;
-      const location = await this._getLocationAsync(address2);
-      this.setState({
-        location: location[0]
-      });
+    const address2 = this.props.store.address + ', ' + this.props.store.city + ', ' + this.props.store.state + this.props.store.zipcode;
+    const location = await this._getLocationAsync(address2);
+    this.setState({
+      location: location[0]
+    });
   }
 
   shareOnTwitter() {
@@ -297,15 +299,19 @@ class CardDetails extends Component {
                             <Grid>
                               <Col></Col>
                               <Col style={{ width: 165 }}>
-                                <TouchableHighlight style={{ borderRadius: 8 }} onPress={this._saveOfferToUser}>
-                                  <LinearGradient
-                                    start={{ x: 0.0, y: 0.25 }}
-                                    end={{ x: 0.5, y: 1.0 }}
-                                    locations={[0, 0.6, 1]}
-                                    colors={['rgb(1,123,125)', 'rgb(3,55,55)', 'rgb(3,35,35)']} style={styles.linearGradient}>
-                                    <Text style={{ color: '#FFFFFF', fontFamily: 'Montserrat-Bold', fontSize: 18, marginLeft: 36, marginTop: 18 }}>Save Offer</Text>
-                                  </LinearGradient>
-                                </TouchableHighlight>
+                                {this.props.isLoading ?
+                                  <View style={{ marginTop: 15 }}><Spinner /></View>
+                                  :
+                                  <TouchableHighlight style={{ borderRadius: 8 }} onPress={this._saveOfferToUser}>
+                                    <LinearGradient
+                                      start={{ x: 0.0, y: 0.25 }}
+                                      end={{ x: 0.5, y: 1.0 }}
+                                      locations={[0, 0.6, 1]}
+                                      colors={['rgb(1,123,125)', 'rgb(3,55,55)', 'rgb(3,35,35)']} style={styles.linearGradient}>
+                                      <Text style={{ color: '#FFFFFF', fontFamily: 'Montserrat-Bold', fontSize: 18, marginLeft: 36, marginTop: 18 }}>Save Offer</Text>
+                                    </LinearGradient>
+                                  </TouchableHighlight>
+                                }
                               </Col>
                               <Col></Col>
                             </Grid>
@@ -352,16 +358,19 @@ class CardDetails extends Component {
                               <Text style={{ fontSize: 15, color: '#FFFFFF' }}>Friday: {this.props.store.hours[5]}</Text>
                               <Text style={{ fontSize: 15, color: '#FFFFFF' }}>Saturday: {this.props.store.hours[6]}</Text>
 
-
-                              <TouchableHighlight underlayColor='rgb(11,148,150)' style={{ borderRadius: 8, marginBottom: 10 }}>
-                                <LinearGradient
-                                  start={{ x: 0.0, y: 0.25 }}
-                                  end={{ x: 0.5, y: 1.0 }}
-                                  locations={[0, 0.6, 1]}
-                                  colors={['rgb(1,123,125)', 'rgb(3,55,55)', 'rgb(3,35,35)']} style={styles.linearGradient}>
-                                  <Text style={{ color: '#FFFFFF', fontFamily: 'Montserrat-Bold', fontSize: 18, marginLeft: 36, marginTop: 18 }}>Save Offer</Text>
-                                </LinearGradient>
-                              </TouchableHighlight>
+                              {this.props.isLoading ?
+                                <View style={{ marginTop: 15 }}><Spinner /></View>
+                                :
+                                <TouchableHighlight underlayColor='rgb(11,148,150)' style={{ borderRadius: 8, marginBottom: 10 }} onPress={this._saveOfferToUser}>
+                                  <LinearGradient
+                                    start={{ x: 0.0, y: 0.25 }}
+                                    end={{ x: 0.5, y: 1.0 }}
+                                    locations={[0, 0.6, 1]}
+                                    colors={['rgb(1,123,125)', 'rgb(3,55,55)', 'rgb(3,35,35)']} style={styles.linearGradient}>
+                                    <Text style={{ color: '#FFFFFF', fontFamily: 'Montserrat-Bold', fontSize: 18, marginLeft: 36, marginTop: 18 }}>Save Offer</Text>
+                                  </LinearGradient>
+                                </TouchableHighlight>
+                              }
                             </ScrollView>
                           </Row>
                         </Grid>
@@ -390,15 +399,19 @@ class CardDetails extends Component {
                             <Grid>
                               <Col></Col>
                               <Col style={{ width: 165 }}>
-                                <TouchableHighlight underlayColor='rgb(11,148,150)' style={{ borderRadius: 8 }}>
-                                  <LinearGradient
-                                    start={{ x: 0.0, y: 0.25 }}
-                                    end={{ x: 0.5, y: 1.0 }}
-                                    locations={[0, 0.6, 1]}
-                                    colors={['rgb(1,123,125)', 'rgb(3,55,55)', 'rgb(3,35,35)']} style={styles.linearGradient}>
-                                    <Text style={{ color: '#FFFFFF', fontFamily: 'Montserrat-Bold', fontSize: 18, marginLeft: 36, marginTop: 18 }}>Save Offer</Text>
-                                  </LinearGradient>
-                                </TouchableHighlight>
+                                {this.props.isLoading ?
+                                  <View style={{ marginTop: 15 }}><Spinner /></View>
+                                  :
+                                  <TouchableHighlight underlayColor='rgb(11,148,150)' style={{ borderRadius: 8 }} onPress={this._saveOfferToUser}>
+                                    <LinearGradient
+                                      start={{ x: 0.0, y: 0.25 }}
+                                      end={{ x: 0.5, y: 1.0 }}
+                                      locations={[0, 0.6, 1]}
+                                      colors={['rgb(1,123,125)', 'rgb(3,55,55)', 'rgb(3,35,35)']} style={styles.linearGradient}>
+                                      <Text style={{ color: '#FFFFFF', fontFamily: 'Montserrat-Bold', fontSize: 18, marginLeft: 36, marginTop: 18 }}>Save Offer</Text>
+                                    </LinearGradient>
+                                  </TouchableHighlight>
+                                }
                               </Col>
                               <Col></Col>
                             </Grid>
@@ -510,7 +523,8 @@ class CardDetails extends Component {
 
 function mapStateToProps(state, props) {
   return {
-    store: state.OfferReducer.available_store
+    store: state.OfferReducer.available_store,
+    isLoading: state.OfferReducer.isFetching
   }
 }
 

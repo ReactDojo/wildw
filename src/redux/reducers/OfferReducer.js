@@ -25,6 +25,7 @@ import {
     FETCHING_QRCODE_FAILURE,
     POSTING_OFFER_TO_USER_SUCCESS,
     POSTING_OFFER_TO_USER_FAILURE,
+    POSTING_OFFER_TO_USER_PENDING,
     FETCHING_AVAILABLE_OFFERS_TO_USER_SUCCESS,
     FETCHING_AVAILABLE_OFFERS_TO_USER_FAILURE,
     FETCHING_AVAILABLE_STORE_SUCCESS,
@@ -128,8 +129,13 @@ const OfferReducer = (state = initialState, action) => {
             state = Object.assign({}, state, { isQRCodeFetching: false, errorMessage: action.payload });
             return state;
         case POSTING_OFFER_TO_USER_SUCCESS:
+            state = Object.assign({}, state, { isFetching: false });
             return state;
         case POSTING_OFFER_TO_USER_FAILURE:
+            state = Object.assign({}, state, { isFetching: false });
+            return state;
+        case POSTING_OFFER_TO_USER_PENDING:
+            state = Object.assign({}, state, { isFetching: true });
             return state;
         case FETCHING_AVAILABLE_OFFERS_TO_USER_SUCCESS:
             state = Object.assign({}, state, { available_offers: action.payload });
