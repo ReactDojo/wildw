@@ -20,6 +20,7 @@ import { MapView, Video, Location, Permissions } from 'expo';
 import { Marker } from 'react-native-maps';
 import moment from 'moment';
 import { fetchOfferStore } from '../redux/actions/OfferActions';
+import call from 'react-native-phone-call';
 
 const { width, height } = Dimensions.get('window');
 const equalWidth = (width - 116) / 3;
@@ -41,6 +42,7 @@ class CardDetails extends Component {
       }
     }
 
+    this._call = this._call.bind(this);
     this._openGallery = this._openGallery.bind(this);
     this._toggleGallery = this._toggleGallery.bind(this);
     this.shareOnFacebook = this.shareOnFacebook.bind(this);
@@ -184,6 +186,18 @@ class CardDetails extends Component {
     //   //   'com.apple.UIKit.activity.PostToTwitter'
     //   // ]
     // })
+  }
+
+  _call(){
+    console.log('get here');
+
+    const phone = {
+      number: this.props.store.phone_number,
+      prompt: true,
+    }
+
+    call(phone).catch(console.error);
+
   }
 
   shareOnEmailwithSMS() {
@@ -330,7 +344,7 @@ class CardDetails extends Component {
                               <Text style={{ fontSize: 15, fontFamily: 'Montserrat-Bold', color: '#fff' }}>Location:</Text>
                               <Text style={{ marginTop: 5, fontSize: 15, color: '#fff' }}>{this.props.store.name}</Text>
                               <Text style={{ fontSize: 15, color: '#fff' }}>{this.props.store.address}, {this.props.store.city}, {this.props.store.state} {this.props.store.zipcode}</Text>
-                              <Text style={{ fontSize: 15, color: '#fff' }}>{this.props.store.phone_number}</Text>
+                              <Text style={{ fontSize: 15, color: '#0645AD' }} onPress={()=>this._call()}>{this.props.store.phone_number}</Text>
 
                               <View style={{ marginTop: 10, height: 156 }}>
                                 <MapView
