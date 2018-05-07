@@ -27,18 +27,15 @@ class Map extends Component {
         super(props);
 
         this.state = {
-            stores: [],
             markers: []
         };
 
         this.getLatLong = this.getLatLong.bind(this);
         this.getMarkers = this.getMarkers.bind(this);
-        //this.mapMarkers = this.mapMarkers.bind(this);
     }
 
     async componentDidMount() {
         this.getMarkers();
-        // const data = this.props.fetchAllStore();
     }
 
     async _getLocationAsync(address) {
@@ -48,61 +45,93 @@ class Map extends Component {
 
     async getLatLong(store) {
         const { status } = await Permissions.askAsync(Permissions.LOCATION);
-        const address2 = store.address + ', ' + store.city + ', ' + store.state + store.zipcode;
+        const address2 = store.address + ', ' + store.city + ', ' + store.state;
+        console.log(address2);
         const location = await this._getLocationAsync(address2);
+        console.log('location ', location);
         return location;
     }
 
+    async
+
 
     async getMarkers() {
-        const mark = this.props.all_stores.map(
-            (store, index) => {
-                const data = store;
-                var obj = this.getLatLong(data);
-                console.log('obj', obj);
-                console.log('store', store);
-                return Object.assign({store: store, coord: obj});
+        //console.log('all stores props ', this.props.all_stores);
+        const promises = this.props.all_stores.map(
+            async (store, index) => {
+                try {
+                    // console.log('index ',index);
+                    // console.log('store', store);
+                    var data = store;
+                    // let coords = await this.getLatLong(store);
+                    // Object.assign(store, { coords: coords[0] });
+                    //console.log('data ', store);
+                    //return store;
+                    // this.setState({
+                    //     markers: store,
+                    // });
+
+
+                    this.getLatLong(data).then(
+                        (value) => {
+                            //console.log('then ', value);
+                            return value;
+                        }
+                    ).then(
+                        (value) => {
+                            const merge = Object.assign(data, {coord: value[0] });
+                            //console.log('merge ', merge);
+                            return merge;
+                        }
+                    ).then(
+                        (value) => {
+                            //console.log(value);
+                            var joined = this.state.markers.concat(value);
+                            //console.log('state update ', joined);
+                            this.setState({
+                                markers: joined
+                            });
+                        }
+                    ).catch(
+                        (e)=>{
+                            console.log('error in then ', e);
+                        }
+                    )
+
+                } catch (e) {
+                    console.log('error ', e);
+                }
             }
         );
 
-        
-        Promise.all(mark).then((value) =>{
-            console.log(value);
-            var x = value.map(
-                (store, index) => {
-                    console.log('store ', store);
-                    return (
-                        <MapView.Marker
-                            key={index + ' marker'}
-                            coordinate={{ latitude: store.coord.latitude, longitude: store.coord.longitude }}
-                            title={'Wildwood Casino'}
-                            description={'119 N Fifth St, Cripple Creek, CO 80813'}
-                        />
-                    )
-                }
-            );
-            this.setState({
-                markers: x,
-            });
-        }
-        )
+        // const done = Promise.all(promises);
+
+        // const temp = Promise.all(promises).then(
+        //     (value)=>{
+        //         console.log('value', value);
+        //         return value;
+        //     }
+        // ).catch(
+        //     (e)=>{
+        //         console.log('error ', e);
+        //     }
+        // )
+
         // this.setState({
-        //     markers: value,
-        // })
-        //console.log(this.state.markers);
+        //     markers: Promise.all(promises),
+        // });
+
+        
+
     }
 
     render() {
-        //console.log(this.props.all_stores);
+        var hasMarkers = false;
+        const allMarkers = this.state.markers;
+        if (allMarkers.length > 0)
+            hasMarkers = true;
 
-        
-        var markbool = false;
-        //var mark = this.mapMarkers();
-
-        // if(mark.length > 0){
-        //     markbool = true;
-        // }
-        //console.log('markers ', mark);
+        console.log('all markers', allMarkers);
 
         return (
             <Container style={styles.container}>
@@ -127,12 +156,19 @@ class Map extends Component {
                                 latitudeDelta: 0.0922,
                                 longitudeDelta: 0.0421,
                             }} >
-                            {/* <MapView.Marker
-                                coordinate={{ latitude: 38.7504664, longitude: -105.1757747 }}
-                                title={'Wildwood Casino'}
-                                description={'119 N Fifth St, Cripple Creek, CO 80813'}
-                            /> */}
-                            {this.state.markers}
+                            {hasMarkers ?
+                                allMarkers.map((value, index) => {
+                                    return (
+                                        <MapView.Marker
+                                            coordinate={{ latitude: value.coord.latitude, longitude: value.coord.longitude }}
+                                            title={value.name}
+                                            key = {index + "marker"}
+                                            description={value.address + ', ' + value.city + ', ' + value.state + ', ' + value.zipcode}
+                                        />
+                                    )
+                                })
+                                : null
+                            }
                         </MapView>
                     </Row>
                     <Row style={{ height: 150, padding: 15 }}>
