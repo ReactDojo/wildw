@@ -344,7 +344,7 @@ class CardDetails extends Component {
                               <Text style={{ fontSize: 15, fontFamily: 'Montserrat-Bold', color: '#fff' }}>Location:</Text>
                               <Text style={{ marginTop: 5, fontSize: 15, color: '#fff' }}>{this.props.store.name}</Text>
                               <Text style={{ fontSize: 15, color: '#fff' }}>{this.props.store.address}, {this.props.store.city}, {this.props.store.state} {this.props.store.zipcode}</Text>
-                              <Text style={{ fontSize: 15, color: '#0645AD' }} onPress={()=>this._call()}>{this.props.store.phone_number}</Text>
+                              <Text style={{ fontSize: 15, color: '#fff', textDecorationLine: 'underline' }} onPress={()=>this._call()}>{this.props.store.phone_number}</Text>
 
                               <View style={{ marginTop: 10, height: 156 }}>
                                 <MapView
