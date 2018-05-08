@@ -136,7 +136,7 @@ class Map extends Component {
         return (
             <Container style={styles.container}>
                 <Grid>
-                    <Row style={{ height: 74 }}>
+                    <Row style={{ height: 94 }}>
                         <Content style={styles.header}>
                             <Grid>
                                 <Col></Col>

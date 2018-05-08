@@ -7,16 +7,16 @@ module.exports = {
 
   // Header
   HEADER_COLOR: '#000000',
-  HEADER_HEIGHT: 74,
+  HEADER_HEIGHT: 94,
   HEADER_LOGO_STYLES: {
     height: 45,
     width: 118,
-    marginTop: 12,
+    marginTop: 32,
     alignSelf: "center"
   },
   HEADER_STYLES: {
     backgroundColor: '#000000',
-    height: 74
+    height: 94
   },
 
   // Misc

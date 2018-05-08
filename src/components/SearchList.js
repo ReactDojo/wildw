@@ -19,13 +19,14 @@ class SearchList extends Component {
     this.props.close();
     this.props.fetchSearch(value);
   }
+
   _keyExtractor = item => item.name;
 
-  _renderItem = ({ item }) => {
+  _renderItem = ({ item, index }) => {
     return (
-      <TouchableHighlight onPress={() => this.gotocarddetails(item.name)}>
+      <TouchableHighlight onPress={() => this.gotocarddetails(item.name)} key={'touchable-' + item.name + index}>
         <View>
-          <Text style={styles.searchlistitemtext}>{item.name}</Text>
+          <Text key={'text-' + item.name + index} style={styles.searchlistitemtext}>{item.name}</Text>
         </View>
       </TouchableHighlight>
     );

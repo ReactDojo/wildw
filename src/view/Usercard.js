@@ -88,6 +88,7 @@ class Usercard extends Component {
     // console.log('search:',this.state.searckeyword);
     this.props.fetchSearch(this.state.searckeyword);
     this.props.fetchAddHistory(this.state.searckeyword);
+    this.closeModal();
     // AsyncStorage.setItem('history','false');
     // AsyncStorage.setItem('keyword',this.state.searckeyword);
     
@@ -136,6 +137,7 @@ async componentDidMount() {
     } catch (error) {
       console.log(error);
     }
+    this.props.fetchOffer();
   }
   openModal() {
     this.setState({modalVisible:true});
@@ -146,7 +148,8 @@ async componentDidMount() {
   }
   render() {
     if (this.state.fontLoaded) {
-      let content = <OfferList offer={this.props.randomoffer.offer} />;
+      let offers = this.props.randomoffer.offer.filter((offer) => offer.userId === "" || !offer.userId);
+      let content = <OfferList offer={offers} />;
       if (this.props.randomoffer.isFetching) {
         content = <Progress.Circle size={30} indeterminate={true} style={{flex:1,alignSelf: 'center',justifyContent: 'center',}}/>;
       }
@@ -158,23 +161,19 @@ async componentDidMount() {
       return (
         <Container style = {styles.container}>
           <Grid>
-            <Row style = {{ height: 74 }}>
+            <Row style = {{ height: 94 }}>
               <Content style={styles.header}>
                 <Grid>
                   <Col>
-                    <TouchableHighlight onPress = {() => { Actions.drawerOpen(); }}>
-                      <LinearGradient start = {{x: 0.0, y: 0.25}} end = {{x: 0.5, y: 1.0}}
-                        locations={[0,0.6,1]}
-                        colors={['rgb(1,123,125)', 'rgb(3,55,55)', 'rgb(3,35,35)']} style={styles.linearGradient}>
-                        <Feather name='menu' size={35} color="#FFFFFF" />
-                      </LinearGradient>
+                    <TouchableHighlight style={{ marginTop: 40, marginLeft: 19 }} onPress = {() => { Actions.drawerOpen(); }}>
+                        <Feather name='menu' size={35} color="#0B9496" />
                     </TouchableHighlight>
                   </Col>
                   <Col>
                     <Image source={logoimage} style = {styles.logo} />
                   </Col>
                   <Col >
-                    <Button transparent style = {{ alignSelf: 'flex-end', marginRight: 19, marginTop: 17 }} onPress={() => this.openModal()}>
+                    <Button transparent style = {{ alignSelf: 'flex-end', marginRight: 19, marginTop: 37 }} onPress={() => this.openModal()}>
                       <Foundation name='filter' size={30} color="#0B9496" />
                     </Button>
                   </Col>
@@ -182,7 +181,7 @@ async componentDidMount() {
               </Content>
             </Row>
             <Row>
-              <Content style = {{flex:1,alignSelf: 'center',}}>
+              <Content style = {{flex:1,alignSelf: 'flex-start',}}>
                  {content}
               </Content>
             </Row>
@@ -221,17 +220,17 @@ async componentDidMount() {
                             <Row style = {{height:80}}>
                               <Grid>
                                 <Col>
-                                  <TextInput placeholder = {''} autoCapitalize = {'none'} placeholderTextColor={'#FFFFFF'} style = {{width:200, marginLeft:29, color:'#FFFFFF', fontSize:30, fontFamily:'Montserrat-SemiBold', marginTop:30, borderLeftColor:'#000000', borderTopColor:'#000000', borderRightColor:'#000000', borderBottomColor:'#FFFFFF', borderWidth: 1}}
+                                  <TextInput placeholder = {'Search'} autoCapitalize = {'none'} placeholderTextColor={'#FFFFFF'} style = {{width:280, alignSelf: 'stretch', marginLeft:29, color:'#FFFFFF', fontSize:30, fontFamily:'Montserrat-SemiBold', marginTop:30, borderLeftColor:'#000000', borderTopColor:'#000000', borderRightColor:'#000000', borderBottomColor:'#FFFFFF', borderWidth: 1}}
                                     onChangeText={
                                       (text) => (
                                         this.setState({searckeyword:text}
                                         ))
                                     }
-                                    value={this.state.searckeyword}/>  
+                                    onSubmitEditing={this.search} />  
                                 </Col>
                                 <Col>
                                   <TouchableHighlight onPress = {this.search} >
-                                    <FontAwesome name = 'search' size = {30} color = "#FFFFFF" style={{alignSelf: 'flex-start', marginTop:30}} />
+                                    <FontAwesome name = 'search' size = {30} color = "#FFFFFF" style={{alignSelf: 'flex-end', marginRight: 30, marginTop:30}} />
                                   </TouchableHighlight>
                                 </Col>
                               </Grid>                              

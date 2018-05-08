@@ -79,10 +79,10 @@ export const fetchingOfferByCategoryFailure = error => ({
 });
 export const fetchOfferByCategory = (data) => {
     return async dispatch => {
+        console.log('Category Search: ', data);
         dispatch(fetchingOfferByCategoryRequest());
         try {
             const value = await AsyncStorage.getItem('token');
-            console.log('mytoken:', value);
             let requestConfig = {
                 method: "GET",
                 headers: { 'Authorization': 'Bearer ' + value }
@@ -108,10 +108,10 @@ export const fetchingSearchFailure = error => ({
 });
 export const fetchSearch = (data) => {
     return async dispatch => {
+        console.log('Searching: ', data);
         dispatch(fetchingSearchRequest());
         try {
             const value = await AsyncStorage.getItem('token');
-            console.log('mytoken:', value);
             let requestConfig = {
                 method: "GET",
                 headers: { 'Authorization': 'Bearer ' + value }
