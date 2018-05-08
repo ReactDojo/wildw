@@ -135,9 +135,11 @@ class CardDetails extends Component {
     const { status } = await Permissions.askAsync(Permissions.LOCATION);
     const address2 = this.props.store.address + ', ' + this.props.store.city + ', ' + this.props.store.state + this.props.store.zipcode;
     const location = await this._getLocationAsync(address2);
-    this.setState({
-      location: location[0]
-    });
+    if (location.length > 0) {
+      this.setState({
+        location: location[0]
+      });
+    }
   }
 
   shareOnTwitter() {
@@ -222,17 +224,13 @@ class CardDetails extends Component {
       return (
         <Container style={styles.container}>
           <Grid>
-            <Row style={{ height: 74 }}>
+            <Row style={{ height: 94 }}>
               <Content style={styles.header}>
                 <Grid>
                   <Col>
                     {Platform.OS === 'ios' ?
-                      <TouchableHighlight onPress={() => { Actions.pop(); }}>
-                        <LinearGradient start={{ x: 0.0, y: 0.25 }} end={{ x: 0.5, y: 1.0 }}
-                          locations={[0, 0.6, 1]}
-                          colors={['rgb(1,123,125)', 'rgb(3,55,55)', 'rgb(3,35,35)']} style={styles.back_button}>
-                          <Entypo name='chevron-left' size={35} color="#FFFFFF" />
-                        </LinearGradient>
+                      <TouchableHighlight style={{ marginTop: 40, marginLeft: 19 }} onPress={() => { Actions.pop(); }}>
+                        <Entypo name='chevron-left' size={35} color="#0B9496" />
                       </TouchableHighlight>
                       : null}
                   </Col>
@@ -248,7 +246,7 @@ class CardDetails extends Component {
                 <Row style={{ height: 260 }}>
                   {image_content}
                 </Row>
-                <Row style={this.state.activeWindow == "2" ? styles.tabcontente1 : styles.tabcontente}>
+                <Row style={styles.tabcontente}>
                   <Grid>
                     <Row style={{ height: 60, borderTopLeftRadius: 15, borderTopRightRadius: 15, }}>
                       <Grid>
@@ -279,7 +277,7 @@ class CardDetails extends Component {
                       <Row>
                         <Grid>
                           <Row>
-                            <View style={{ flex: 1, marginLeft: 19, marginRight: 25 }}>
+                            <ScrollView style={{ flex: 1, marginLeft: 19, marginRight: 25, marginBottom: 10 }} showsVerticalScrollIndicator={false} showsHorizontalScrollIndicator={false}>
                               <Text style={{ fontSize: 30, color: '#FFFFFF', fontFamily: 'Montserrat-Medium' }}>{this.props.details.name}</Text>
 
                               <Text style={{ fontSize: 15, marginTop: 14, color: '#FFFFFF', lineHeight: 18, fontWeight: 'bold' }}>Description</Text>
@@ -293,27 +291,19 @@ class CardDetails extends Component {
 
                               <Text style={{ fontSize: 15, marginTop: 14, color: '#FFFFFF', lineHeight: 18, fontWeight: 'bold' }}>Fine Print</Text>
                               <Text style={{ fontSize: 14, color: '#FFFFFF', fontFamily: 'Montserrat-Medium', lineHeight: 18 }}>This offer is a {this.props.details.pricing} and it is valid from {moment(this.props.details.start_date).format('MMM Do YYYY')} to {moment(this.props.details.end_date).format('MMM Do YYYY')}. It's price is ${this.props.details.original_price} for ${this.props.details.sale_price}. The estimated value is ${this.props.details.perceived_value}</Text>
-                            </View>
+                            </ScrollView>
                           </Row>
-                          <Row style={{ height: 104 }}>
+                          <Row style={{ height: 65 }}>
                             <Grid>
-                              <Col></Col>
-                              <Col style={{ width: 165 }}>
+                              <Col>
                                 {this.props.isLoading ?
-                                  <View style={{ marginTop: 15 }}><Spinner /></View>
+                                  <View><Spinner /></View>
                                   :
-                                  <TouchableHighlight style={{ borderRadius: 8 }} onPress={this._saveOfferToUser}>
-                                    <LinearGradient
-                                      start={{ x: 0.0, y: 0.25 }}
-                                      end={{ x: 0.5, y: 1.0 }}
-                                      locations={[0, 0.6, 1]}
-                                      colors={['rgb(1,123,125)', 'rgb(3,55,55)', 'rgb(3,35,35)']} style={styles.linearGradient}>
-                                      <Text style={{ color: '#FFFFFF', fontFamily: 'Montserrat-Bold', fontSize: 18, marginLeft: 36, marginTop: 18 }}>Save Offer</Text>
-                                    </LinearGradient>
-                                  </TouchableHighlight>
+                                    <Button full dark onPress={this._saveOfferToUser} style={{ height: 55, marginBottom: 10 }}>
+                                      <Text style={{ color: '#FFFFFF', fontFamily: 'Montserrat-Bold', fontSize: 18 }}>Save Offer</Text>
+                                    </Button>
                                 }
                               </Col>
-                              <Col></Col>
                             </Grid>
                           </Row>
                         </Grid>
@@ -325,9 +315,9 @@ class CardDetails extends Component {
                       <Row>
                         <Grid>
                           <Row>
-                            <ScrollView style={{ flex: 1, marginLeft: 15, marginRight: 16 }}>
+                            <ScrollView style={{ flex: 1, marginLeft: 15, marginRight: 16 }} showsVerticalScrollIndicator={false} showsHorizontalScrollIndicator={false}>
 
-                              <Text style={{ fontSize: 15, fontFamily: 'Montserrat-Bold', color: '#fff' }}>Location:</Text>
+                              <Text style={{ fontSize: 15, fontFamily: 'Montserrat-Bold', color: '#fff' }}>Location</Text>
                               <Text style={{ marginTop: 5, fontSize: 15, color: '#fff' }}>{this.props.store.name}</Text>
                               <Text style={{ fontSize: 15, color: '#fff' }}>{this.props.store.address}, {this.props.store.city}, {this.props.store.state} {this.props.store.zipcode}</Text>
                               <Text style={{ fontSize: 15, color: '#fff' }}>{this.props.store.phone_number}</Text>
@@ -349,28 +339,22 @@ class CardDetails extends Component {
                                 </MapView>
                               </View>
 
-                              <Text style={{ marginTop: 10, fontSize: 15, fontFamily: 'Montserrat-Bold', color: '#FFFFFF' }}>Hours:</Text>
-                              <Text style={{ marginTop: 7, fontSize: 15, color: '#FFFFFF' }}>Sunday: {this.props.store.hours[0]} </Text>
-                              <Text style={{ fontSize: 15, color: '#fff' }}>Monday: {this.props.store.hours[1]}</Text>
-                              <Text style={{ fontSize: 15, color: '#fff' }}>Tuesday: {this.props.store.hours[2]} </Text>
-                              <Text style={{ fontSize: 15, color: '#fff' }}>Wednesday: {this.props.store.hours[3]}</Text>
-                              <Text style={{ fontSize: 15, color: '#fff' }}>Thursday: {this.props.store.hours[4]}</Text>
-                              <Text style={{ fontSize: 15, color: '#FFFFFF' }}>Friday: {this.props.store.hours[5]}</Text>
-                              <Text style={{ fontSize: 15, color: '#FFFFFF' }}>Saturday: {this.props.store.hours[6]}</Text>
+                              <Text style={{ marginTop: 10, fontSize: 15, fontFamily: 'Montserrat-Bold', color: '#FFFFFF' }}>Hours</Text>
+                              <Text style={{ marginTop: 7, fontSize: 15, color: '#FFFFFF' }}>Sunday: {this.props.store.hours && this.props.store.hours[0]} </Text>
+                              <Text style={{ fontSize: 15, color: '#fff' }}>Monday: {this.props.store.hours && this.props.store.hours[1]}</Text>
+                              <Text style={{ fontSize: 15, color: '#fff' }}>Tuesday: {this.props.store.hours && this.props.store.hours[2]} </Text>
+                              <Text style={{ fontSize: 15, color: '#fff' }}>Wednesday: {this.props.store.hours && this.props.store.hours[3]}</Text>
+                              <Text style={{ fontSize: 15, color: '#fff' }}>Thursday: {this.props.store.hours && this.props.store.hours[4]}</Text>
+                              <Text style={{ fontSize: 15, color: '#FFFFFF' }}>Friday: {this.props.store.hours && this.props.store.hours[5]}</Text>
+                              <Text style={{ fontSize: 15, color: '#FFFFFF' }}>Saturday: {this.props.store.hours && this.props.store.hours[6]}</Text>
 
                               {this.props.isLoading ?
-                                <View style={{ marginTop: 15 }}><Spinner /></View>
-                                :
-                                <TouchableHighlight underlayColor='rgb(11,148,150)' style={{ borderRadius: 8, marginBottom: 10 }} onPress={this._saveOfferToUser}>
-                                  <LinearGradient
-                                    start={{ x: 0.0, y: 0.25 }}
-                                    end={{ x: 0.5, y: 1.0 }}
-                                    locations={[0, 0.6, 1]}
-                                    colors={['rgb(1,123,125)', 'rgb(3,55,55)', 'rgb(3,35,35)']} style={styles.linearGradient}>
-                                    <Text style={{ color: '#FFFFFF', fontFamily: 'Montserrat-Bold', fontSize: 18, marginLeft: 36, marginTop: 18 }}>Save Offer</Text>
-                                  </LinearGradient>
-                                </TouchableHighlight>
-                              }
+                                  <View><Spinner /></View>
+                                  :
+                                    <Button full dark onPress={this._saveOfferToUser} style={{ height: 55, marginTop: 10, marginBottom: 10 }}>
+                                      <Text style={{ color: '#FFFFFF', fontFamily: 'Montserrat-Bold', fontSize: 18 }}>Save Offer</Text>
+                                    </Button>
+                                }
                             </ScrollView>
                           </Row>
                         </Grid>
@@ -382,7 +366,7 @@ class CardDetails extends Component {
                       <Row>
                         <Grid>
                           <Row>
-                            <View style={{ flex: 1 }}>
+                            <View>
                               {this.props.details.video_url !== "" ?
                                 <Video source={{ uri: this.props.details.video_url }} useNativeControls={true} style={{ left: 18, width: 86.5, height: 86 }} />
                                 : null}
@@ -395,25 +379,17 @@ class CardDetails extends Component {
                               />
                             </View>
                           </Row>
-                          <Row style={{ height: 104 }}>
+                          <Row style={{ height: 65 }}>
                             <Grid>
-                              <Col></Col>
-                              <Col style={{ width: 165 }}>
-                                {this.props.isLoading ?
-                                  <View style={{ marginTop: 15 }}><Spinner /></View>
+                              <Col>
+                              {this.props.isLoading ?
+                                  <View><Spinner /></View>
                                   :
-                                  <TouchableHighlight underlayColor='rgb(11,148,150)' style={{ borderRadius: 8 }} onPress={this._saveOfferToUser}>
-                                    <LinearGradient
-                                      start={{ x: 0.0, y: 0.25 }}
-                                      end={{ x: 0.5, y: 1.0 }}
-                                      locations={[0, 0.6, 1]}
-                                      colors={['rgb(1,123,125)', 'rgb(3,55,55)', 'rgb(3,35,35)']} style={styles.linearGradient}>
-                                      <Text style={{ color: '#FFFFFF', fontFamily: 'Montserrat-Bold', fontSize: 18, marginLeft: 36, marginTop: 18 }}>Save Offer</Text>
-                                    </LinearGradient>
-                                  </TouchableHighlight>
+                                    <Button full dark onPress={this._saveOfferToUser} style={{ height: 55, marginBottom: 10 }}>
+                                      <Text style={{ color: '#FFFFFF', fontFamily: 'Montserrat-Bold', fontSize: 18 }}>Save Offer</Text>
+                                    </Button>
                                 }
                               </Col>
-                              <Col></Col>
                             </Grid>
                           </Row>
                         </Grid>

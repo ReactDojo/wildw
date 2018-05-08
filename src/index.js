@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { Router, Scene, Reducer } from 'react-native-router-flux';
 import { Container, Header, Content, Form, Item, Input, Label, Button, Text, Thumbnail, Icon, Right, View } from 'native-base';
-import { StyleSheet, Image} from 'react-native';
+import { StyleSheet, Image, StatusBar } from 'react-native';
 const reducerCreate = params => {
     const defaultReducer = new Reducer(params);
     return (state, action) => {
@@ -35,20 +35,25 @@ export default class Main extends Component<{}> {
     constructor(props) {
         super(props);
 
+        console.disableYellowBox = true;
     }
 
     render() {
         return (
             <View style={{ flex: 1 }}>
+                <StatusBar
+                    backgroundColor="black"
+                    barStyle="light-content"
+                />
                 <Router createReducer={reducerCreate} getSceneStyle={getSceneStyle}>
                     <Scene key="root">
-                        <Scene key="home" component = {Home} hideNavBar={true} initial />
+                        <Scene key="home" component={Home} hideNavBar={true} initial />
                         <Scene key="welcome" hideNavBar={true} hideTabBar panHandlers={null}
                             schema="modal" direction="vertical">
                             <Scene key="welcome" component={Welcome} title="Welcome" initial={true} panHandlers={null} />
-                            <Scene key="login" component={Login} title="Login" panHandlers={null}/>
+                            <Scene key="login" component={Login} title="Login" panHandlers={null} />
                             <Scene key="register" component={Register} title="Register" panHandlers={null} />
-                            <Scene key="password" component={Password} title="Password" panHandlers={null}/>
+                            <Scene key="password" component={Password} title="Password" panHandlers={null} />
                         </Scene>
                         <Scene key="drawer" hideNavBar={true} drawer contentComponent={SideBar} drawerWidth={192}>
                             <Scene key="main" >
@@ -58,7 +63,7 @@ export default class Main extends Component<{}> {
                                     component={Usercard}
                                     initial
                                 />
-                                
+
                                 <Scene
                                     key="offerdetails"
                                     hideNavBar={true}
@@ -70,15 +75,15 @@ export default class Main extends Component<{}> {
                                     component={MyOffer}
                                 />
                                 <Scene
-                                    key = "mycard"
-                                    hideNavBar = {true}
-                                    component = {MyCard}
+                                    key="mycard"
+                                    hideNavBar={true}
+                                    component={MyCard}
                                 />
 
                                 <Scene
-                                    key = "map"
-                                    hideNavBar = {true}
-                                    component = {Map}
+                                    key="map"
+                                    hideNavBar={true}
+                                    component={Map}
                                 />
                             </Scene>
                         </Scene>
