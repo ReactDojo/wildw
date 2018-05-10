@@ -46,7 +46,6 @@ export default class SideBar extends React.Component {
         'Montserrat-ThinItalic': require('../../assets/fonts/Montserrat-ThinItalic.ttf'),
       });
       this.setState({ fontLoaded: true });
-      console.log('fonts are loaded');
     } catch (error) {
       console.log(error);
     }

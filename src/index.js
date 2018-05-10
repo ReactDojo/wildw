@@ -2,12 +2,6 @@ import React, { Component } from 'react';
 import { Router, Scene, Reducer } from 'react-native-router-flux';
 import { Container, Header, Content, Form, Item, Input, Label, Button, Text, Thumbnail, Icon, Right, View } from 'native-base';
 import { StyleSheet, Image, StatusBar } from 'react-native';
-const reducerCreate = params => {
-    const defaultReducer = new Reducer(params);
-    return (state, action) => {
-        return defaultReducer(state, action);
-    };
-};
 import CardDetails from './view/CardDetails';
 import MyOffer from './view/MyOffer';
 import MyCard from './view/MyCard';
@@ -20,79 +14,64 @@ import Login from './view/start/auth/login';
 import Register from './view/start/auth/register';
 import Password from './view/start/auth/password';
 import store from './redux/store';
-const getSceneStyle = (props, computedProps) => {
-    const style = {
-        flex: 1,
-        backgroundColor: '#fff',
-        shadowColor: null,
-        shadowOffset: null,
-        shadowOpacity: null,
-        shadowRadius: null
-    };
-    return style;
+
+const reducerCreate = params => {
+  const defaultReducer = new Reducer(params);
+  return (state, action) => {
+    return defaultReducer(state, action);
+  };
 };
-export default class Main extends Component<{}> {
-    constructor(props) {
-        super(props);
 
-        console.disableYellowBox = true;
-    }
+const getSceneStyle = (props, computedProps) => {
+  const style = {
+    flex: 1,
+    backgroundColor: '#fff',
+    shadowColor: null,
+    shadowOffset: null,
+    shadowOpacity: null,
+    shadowRadius: null
+  };
+  return style;
+};
 
-    render() {
-        return (
-            <View style={{ flex: 1 }}>
-                <StatusBar
-                    backgroundColor="black"
-                    barStyle="light-content"
-                />
-                <Router createReducer={reducerCreate} getSceneStyle={getSceneStyle}>
-                    <Scene key="root">
-                        <Scene key="home" component={Home} hideNavBar={true} initial />
-                        <Scene key="welcome" hideNavBar={true} hideTabBar panHandlers={null}
-                            schema="modal" direction="vertical">
-                            <Scene key="welcome" component={Welcome} title="Welcome" initial={true} panHandlers={null} />
-                            <Scene key="login" component={Login} title="Login" panHandlers={null} />
-                            <Scene key="register" component={Register} title="Register" panHandlers={null} />
-                            <Scene key="password" component={Password} title="Password" panHandlers={null} />
-                        </Scene>
-                        <Scene key="drawer" hideNavBar={true} drawer contentComponent={SideBar} drawerWidth={192}>
-                            <Scene key="main" >
-                                <Scene
-                                    key="offerlist"
-                                    hideNavBar={true}
-                                    component={Usercard}
-                                    initial
-                                />
+export default class Main extends Component {
 
-                                <Scene
-                                    key="offerdetails"
-                                    hideNavBar={true}
-                                    component={CardDetails}
-                                />
-                                <Scene
-                                    key="myoffer"
-                                    hideNavBar={true}
-                                    component={MyOffer}
-                                />
-                                <Scene
-                                    key="mycard"
-                                    hideNavBar={true}
-                                    component={MyCard}
-                                />
+  constructor(props) {
+    super(props);
+    console.disableYellowBox = true;
+  }
 
-                                <Scene
-                                    key="map"
-                                    hideNavBar={true}
-                                    component={Map}
-                                />
-                            </Scene>
-                        </Scene>
-                    </Scene>
-                </Router>
-            </View>
-
-        );
-    }
+  render() {
+    return (
+      <View style={{ flex: 1 }}>
+        <StatusBar
+          backgroundColor="black"
+          barStyle="light-content"
+        />
+        <Router createReducer={reducerCreate} getSceneStyle={getSceneStyle}>
+          <Scene key="root">
+            <Scene key="home" component={Home} hideNavBar={true} initial />
+            <Scene key="welcome" hideNavBar={true} hideTabBar panHandlers={null} schema="modal" direction="vertical">
+              <Scene key="welcome" component={Welcome} title="Welcome" initial={true} panHandlers={null} />
+              <Scene key="login" component={Login} title="Login" panHandlers={null} />
+              <Scene key="register" component={Register} title="Register" panHandlers={null} />
+              <Scene key="password" component={Password} title="Password" panHandlers={null} />
+            </Scene>
+            <Scene key="drawer" hideNavBar={true} drawer contentComponent={SideBar} drawerWidth={192}>
+              <Scene key="main" >
+                <Scene key="offerlist" hideNavBar={true} component={Usercard} initial />
+                <Scene key="offerdetails" hideNavBar={true} component={CardDetails} />
+                <Scene key="myoffer" hideNavBar={true} component={MyOffer} />
+                <Scene key="mycard" hideNavBar={true} component={MyCard} />
+                <Scene key="map" hideNavBar={true} component={Map} />
+              </Scene>
+            </Scene>
+          </Scene>
+        </Router>
+      </View>
+    );
+  }
+  
 }
 
 

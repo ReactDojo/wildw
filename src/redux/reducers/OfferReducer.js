@@ -47,7 +47,8 @@ const initialState = {
     offer: [],
     category: [],
     history: [],
-    available_offers: []
+    available_offers: [],
+    redeemed_offers: []
 };
 import { Actions } from 'react-native-router-flux';
 const OfferReducer = (state = initialState, action) => {
@@ -122,7 +123,6 @@ const OfferReducer = (state = initialState, action) => {
             state = Object.assign({}, state, { issignupFetching: false, isloginFetching: false });
             return state;
         case FETCHING_QRCODE_SUCCESS:
-            console.log(state);
             state = Object.assign({}, state, { isQRCodeFetching: false, qr_code: action.payload });
             return state;
         case FETCHING_QRCODE_FAILURE:
@@ -138,7 +138,9 @@ const OfferReducer = (state = initialState, action) => {
             state = Object.assign({}, state, { isFetching: true });
             return state;
         case FETCHING_AVAILABLE_OFFERS_TO_USER_SUCCESS:
-            state = Object.assign({}, state, { available_offers: action.payload });
+            let available_offers = action.payload.filter((offer) => offer.redeemed === false);
+            let redeemed_offers = action.payload.filter((offer) => offer.redeemed === true);
+            state = Object.assign({}, state, { available_offers: available_offers, redeemed_offers: redeemed_offers });
             return state;
         case FETCHING_AVAILABLE_OFFERS_TO_USER_FAILURE:
             state = Object.assign({}, state, { errorMessage: action.payload });

@@ -143,7 +143,7 @@ export const fetchCategory = () => {
         dispatch(fetchingCategoryRequest());
         try {
             const value = await AsyncStorage.getItem('token');
-            console.log('mytoken:', value);
+            
             let requestConfig = {
                 method: "GET",
                 headers: { 'Authorization': 'Bearer ' + value }
@@ -511,7 +511,6 @@ export const fetchAllStore = () => {
 
             let respond = await fetch(url, requestConfig);
             let json = await respond.json();
-            console.log('json ',json);
 
             dispatch(fetchAllStoresSuccess(json));
         }

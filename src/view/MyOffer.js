@@ -20,7 +20,7 @@ import MyOfferReddemList from '../components/MyOfferReddemList';
 import { fetchAvailableOffers } from '../redux/actions/OfferActions'
 import { Actions } from 'react-native-router-flux';
 
-class MyOffer extends Component<{}> {
+class MyOffer extends Component {
 
   constructor(props) {
     super(props);
@@ -82,8 +82,8 @@ class MyOffer extends Component<{}> {
             </Grid>
           </Row>
           <Row>
-            {this.state.activeWindow == "0" ? <Content>{myofferall_content}</Content> : null}
-            {this.state.activeWindow == "1" ? <Content>{myofferallreddemlist_content}</Content> : null}
+            {this.state.activeWindow == "0" ? myofferall_content : null}
+            {this.state.activeWindow == "1" ? myofferallreddemlist_content : null}
           </Row>
         </Grid>
       </Container>

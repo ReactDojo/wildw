@@ -11,6 +11,7 @@ import { connect } from 'react-redux';
 import Barcode from 'react-native-barcode-builder';
 import moment from 'moment';
 import SVGImage from 'react-native-remote-svg'
+import { fetchAvailableOffers } from '../redux/actions/OfferActions';
 
 class MyOfferList extends Component {
 
@@ -19,7 +20,6 @@ class MyOfferList extends Component {
 
     this.state = {
       modalVisible: false,
-      available_offers: this.props.available_offers.filter(offer => offer.redeemed == false),
       popupWindow: "0",
       details_name: '',
       details_description: '',
@@ -48,7 +48,7 @@ class MyOfferList extends Component {
         <View>
           <Text style={styles.listtitletext}>{item.name}</Text>
           <Text style={styles.listtimetext}>5 pm today</Text>
-          <Text style={styles.listcontenttext}>{item.story}</Text>
+          <Text style={styles.listcontenttext} numberOfLines={1}>{item.story}</Text>
         </View>
       </TouchableHighlight>
     );
@@ -56,14 +56,16 @@ class MyOfferList extends Component {
 
   render() {
     return (
-      <View>
+      <View style={{ flex: 1}}>
         <FlatList
           style={{ flex: 1 }}
-          data={this.state.available_offers}
+          data={this.props.available_offers}
           renderItem={this._renderItem}
           keyExtractor={this._keyExtractor}
           showsVerticalScrollIndicator={false}
           showsHorizontalScrollIndicator={false}
+          refreshing={this.props.isFetching}
+          onRefresh={this.props.fetchAvailableOffers}
         />
         <Modal
           visible={this.state.modalVisible}
@@ -142,7 +144,8 @@ class MyOfferList extends Component {
 function mapStateToProps(state, props) {
   return {
     available_offers: state.OfferReducer.available_offers,
-    qr_code: state.OfferReducer.qr_code
+    qr_code: state.OfferReducer.qr_code,
+    isFetching: state.OfferReducer.isFetching
   }
 }
-export default connect(mapStateToProps, null)(MyOfferList);
+export default connect(mapStateToProps, { fetchAvailableOffers })(MyOfferList);
