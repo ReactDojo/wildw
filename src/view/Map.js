@@ -23,185 +23,119 @@ import { fetchAllStore } from '../redux/actions/OfferActions';
 
 class Map extends Component {
 
-    constructor(props) {
-        super(props);
+  constructor(props) {
+    super(props);
 
-        this.state = {
-            markers: []
-        };
+    this.state = {
+      markers: [],
+      stores: [],
+      wildwood_casino:
+        {
+          name: 'Wildwood Casino',
+          address: '119 N Fifth St',
+          city: 'Cripple Creek',
+          state: 'CO',
+          zipcode: '80813',
+          location: {
+            lat: 38.747789,
+            lng: -105.1766526
+          },
+          phone_number: '(719) 244-9700'
+        },
+      selected_location: {}
+    };
 
-        this.getLatLong = this.getLatLong.bind(this);
-        this.getMarkers = this.getMarkers.bind(this);
-    }
+  }
 
-    async componentDidMount() {
-        this.getMarkers();
-    }
+  async componentDidMount() {
+    const { status } = await Permissions.askAsync(Permissions.LOCATION);
 
-    async _getLocationAsync(address) {
-        let location = await Location.geocodeAsync(address);
-        return location;
-    }
+    let stores = [].concat(this.state.wildwood_casino, ...this.props.all_stores);
 
-    async getLatLong(store) {
-        const { status } = await Permissions.askAsync(Permissions.LOCATION);
-        const address2 = store.address + ', ' + store.city + ', ' + store.state;
-        console.log(address2);
-        const location = await this._getLocationAsync(address2);
-        console.log('location ', location);
-        return location;
-    }
+    this.setState({
+      stores: stores,
+      selected_location: this.state.wildwood_casino
+    })
+  }
 
-    async
+  _setSelected = store => {
+    this.setState({
+      selected_location: store
+    })
+  }
 
-
-    async getMarkers() {
-        //console.log('all stores props ', this.props.all_stores);
-        const promises = this.props.all_stores.map(
-            async (store, index) => {
-                try {
-                    // console.log('index ',index);
-                    // console.log('store', store);
-                    var data = store;
-                    // let coords = await this.getLatLong(store);
-                    // Object.assign(store, { coords: coords[0] });
-                    //console.log('data ', store);
-                    //return store;
-                    // this.setState({
-                    //     markers: store,
-                    // });
-
-
-                    this.getLatLong(data).then(
-                        (value) => {
-                            //console.log('then ', value);
-                            return value;
-                        }
-                    ).then(
-                        (value) => {
-                            const merge = Object.assign(data, {coord: value[0] });
-                            //console.log('merge ', merge);
-                            return merge;
-                        }
-                    ).then(
-                        (value) => {
-                            //console.log(value);
-                            var joined = this.state.markers.concat(value);
-                            //console.log('state update ', joined);
-                            this.setState({
-                                markers: joined
-                            });
-                        }
-                    ).catch(
-                        (e)=>{
-                            console.log('error in then ', e);
-                        }
-                    )
-
-                } catch (e) {
-                    console.log('error ', e);
-                }
-            }
-        );
-
-        // const done = Promise.all(promises);
-
-        // const temp = Promise.all(promises).then(
-        //     (value)=>{
-        //         console.log('value', value);
-        //         return value;
-        //     }
-        // ).catch(
-        //     (e)=>{
-        //         console.log('error ', e);
-        //     }
-        // )
-
-        // this.setState({
-        //     markers: Promise.all(promises),
-        // });
-
-        
-
-    }
-
-    render() {
-        var hasMarkers = false;
-        const allMarkers = this.state.markers;
-        if (allMarkers.length > 0)
-            hasMarkers = true;
-
-        console.log('all markers', allMarkers);
-
-        return (
-            <Container style={styles.container}>
-                <Grid>
-                    <Row style={{ height: 94 }}>
-                        <Content style={styles.header}>
-                            <Grid>
-                                <Col></Col>
-                                <Col>
-                                    <Image source={logoimage} style={styles.logo} />
-                                </Col>
-                                <Col></Col>
-                            </Grid>
-                        </Content>
-                    </Row>
-                    <Row>
-                        <MapView
-                            style={{ flex: 1 }}
-                            initialRegion={{
-                                latitude: 38.7504664,
-                                longitude: -105.1757747,
-                                latitudeDelta: 0.0922,
-                                longitudeDelta: 0.0421,
-                            }} >
-                            {hasMarkers ?
-                                allMarkers.map((value, index) => {
-                                    return (
-                                        <MapView.Marker
-                                            coordinate={{ latitude: value.coord.latitude, longitude: value.coord.longitude }}
-                                            title={value.name}
-                                            key = {index + "marker"}
-                                            description={value.address + ', ' + value.city + ', ' + value.state + ', ' + value.zipcode}
-                                        />
-                                    )
-                                })
-                                : null
-                            }
-                        </MapView>
-                    </Row>
-                    <Row style={{ height: 150, padding: 15 }}>
-                        <Content >
-                            <Row>
-                                <Text style={styles.mapTitle}>Wildwood Casino</Text>
-                            </Row>
-                            <Row>
-                                <Text style={styles.mapDetail}>119 N Fifth St, Cripple Creek, CO 80813</Text>
-                            </Row>
-                            <Row>
-                                <Text style={styles.mapDetail}>(719) 244-9700</Text>
-                            </Row>
-                            <Row>
-                                <Col>
-                                    <TouchableHighlight onPress={Actions.pop}>
-                                        <Text style={styles.pop_cancel}>Cancel</Text>
-                                    </TouchableHighlight>
-                                </Col>
-                            </Row>
-                        </Content>
-                    </Row>
-                </Grid>
-            </Container>
-        );
-    }
+  render() {
+    let { stores, selected_location } = this.state;
+    return (
+      <Container style={styles.container}>
+        <Grid>
+          <Row style={{ height: 94 }}>
+            <Content style={styles.header}>
+              <Grid>
+                <Col></Col>
+                <Col>
+                  <Image source={logoimage} style={styles.logo} />
+                </Col>
+                <Col></Col>
+              </Grid>
+            </Content>
+          </Row>
+          <Row>
+            <MapView
+              style={{ flex: 1 }}
+              initialRegion={{
+                latitude: 38.7504664,
+                longitude: -105.1757747,
+                latitudeDelta: 0.02,
+                longitudeDelta: 0.008,
+              }} >
+              {stores ?
+                stores.map((store, index) => {
+                  return (
+                    <MapView.Marker
+                      onPress={() => this._setSelected(store)}
+                      coordinate={{ latitude: store.location.lat, longitude: store.location.lng }}
+                      title={store.name}
+                      key={index + "marker"}
+                      description={store.address + ', ' + store.city + ', ' + store.state + ', ' + store.zipcode}
+                    />
+                  )
+                })
+                : null
+              }
+            </MapView>
+          </Row>
+          <Row style={{ height: 150, padding: 15 }}>
+            <Content>
+              <Row>
+                <Text style={styles.mapTitle}>{selected_location.name}</Text>
+              </Row>
+              <Row>
+                <Text style={styles.mapDetail}>{selected_location.address + ', ' + selected_location.city + ', ' + selected_location.state + ' ' + selected_location.zipcode}</Text>
+              </Row>
+              <Row>
+                <Text style={styles.mapDetail}>{selected_location.phone_number}</Text>
+              </Row>
+              <Row>
+                <Col>
+                  <TouchableHighlight onPress={Actions.pop}>
+                    <Text style={styles.pop_cancel}>Cancel</Text>
+                  </TouchableHighlight>
+                </Col>
+              </Row>
+            </Content>
+          </Row>
+        </Grid>
+      </Container>
+    );
+  }
 }
 
 function mapStateToProps(state, props) {
-    return {
-        map_url: '',
-        all_stores: state.OfferReducer.all_stores
-    }
+  return {
+    map_url: '',
+    all_stores: state.OfferReducer.all_stores
+  }
 }
 
 export default connect(mapStateToProps, { fetchAllStore })(Map);
