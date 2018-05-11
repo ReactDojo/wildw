@@ -1,4 +1,5 @@
 import {StyleSheet} from 'react-native';
+import { Dimensions } from 'react-native';
 
 module.exports = StyleSheet.create({
 
@@ -53,9 +54,8 @@ module.exports = StyleSheet.create({
 
     backgroundImageContainer: {
         flex: 1,
-        width: 375,
-        position: 'relative',
-        resizeMode: 'cover'
+        resizeMode: 'stretch',
+        width: Dimensions.get('window').width
     },
 
     loginContainer: {
@@ -70,7 +70,6 @@ module.exports = StyleSheet.create({
         display: 'flex',
         justifyContent: 'center',
         alignItems: 'center',
-        width: 375,
         height: 166,
         backgroundColor: "#000000"
     },
@@ -81,6 +80,7 @@ module.exports = StyleSheet.create({
     },
 
     mainLoginContainer: {
+        flex: 1,
         display: 'flex',
         flexDirection: 'column',
         alignItems: 'center'
@@ -88,7 +88,6 @@ module.exports = StyleSheet.create({
 
     loginForm: {
         display: 'flex',
-        width: 345,
         height: 305,
         marginTop: 55,
         borderRadius: 15,
