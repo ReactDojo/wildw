@@ -116,11 +116,8 @@ export class Authentication extends Component {
 
                                 <Button onPress={this.submit}
                                         btnText={(this.props.recover && this.props.isloginFetching === false) ? "Submit" : title}/>
-                                <View/>
+                                
                             </View>
-                        </View>
-                        <View style={styles.requestMessage}>
-                            <Text style={styles.requestText}>Don't you have a card? Request one now.</Text>
                         </View>
                     </View>
                 </View>
