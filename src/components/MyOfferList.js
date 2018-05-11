@@ -42,6 +42,15 @@ class MyOfferList extends Component {
 
   _keyExtractor = item => item.id;
 
+  _renderEmptyItems = () => {
+    return (
+      <View style={styles.listview}>
+        <Text style={styles.listtitletext}>We're sorry.</Text>
+        <Text style={styles.listtitletext}>There are not any content for this section available at this time.</Text>
+      </View>
+    );
+  }
+
   _renderItem = ({ item }) => {
     return (
       <TouchableHighlight underlayColor='rgb(11,148,150)' onPress={() => this.openModal(item)} style={styles.listview} >
@@ -66,6 +75,7 @@ class MyOfferList extends Component {
           showsHorizontalScrollIndicator={false}
           refreshing={this.props.isFetching}
           onRefresh={this.props.fetchAvailableOffers}
+          ListEmptyComponent={this._renderEmptyItems}
         />
         <Modal
           visible={this.state.modalVisible}
