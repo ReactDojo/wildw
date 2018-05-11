@@ -382,7 +382,7 @@ class CardDetails extends Component {
                           <Row>
                             <View>
                               {this.props.details.video_url !== "" ?
-                                <Video source={{ uri: this.props.details.video_url }} useNativeControls={true} style={{ left: 18, width: 86.5, height: 86 }} />
+                                <Video source={{ uri: this.props.details.video_url }} resizeMode='cover' useNativeControls={true} style={styles.video_item} />
                                 : null}
                               <FlatList
                                 data={this.state.images_array}

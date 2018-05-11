@@ -1,4 +1,4 @@
-import { Platform, StyleSheet } from 'react-native';
+import { Platform, StyleSheet, Dimensions } from 'react-native';
 import App from './_constants';
 
 module.exports = StyleSheet.create({
@@ -146,5 +146,11 @@ module.exports = StyleSheet.create({
     borderRadius: 25,
     marginLeft: 14,
   },
+
+  video_item: {
+    left: 18, 
+    width: Dimensions.get('window').width - 68,
+    height: 86
+  }
 
 });  
