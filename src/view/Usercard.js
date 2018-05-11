@@ -202,9 +202,11 @@ class Usercard extends Component {
               <Row style={{ height: 100, backgroundColor: '#000000' }}>
                 <Grid>
                   <Col>
-                    <TouchableHighlight onPress={this.search_all} >
-                      <Text style={styles.clearbutton}>Clear</Text>
-                    </TouchableHighlight>
+                    {this.state.popupWindow === "1" ?
+                      <TouchableHighlight onPress={this.search_all} >
+                        <Text style={styles.clearbutton}>Clear</Text>
+                      </TouchableHighlight>
+                      : null}
                   </Col>
                   <Col>
                     <TouchableHighlight onPress={() => this.closeModal()}>
