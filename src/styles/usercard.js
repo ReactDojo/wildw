@@ -79,6 +79,22 @@ module.exports = StyleSheet.create({
     marginBottom: 7,
   },
 
+  emptylistview: {
+    shadowOpacity: 0.08,
+    shadowRadius: 9,
+    shadowOffset: { width: 0, height: 0 },
+    borderRadius: App.CARDVIEW_CORNER,
+    backgroundColor: App.FOREGROUND_COLOR,
+    elevation: 2,
+    flex: 1,
+    flexDirection: 'column',
+    marginLeft: 14,
+    marginRight: 16,
+    marginTop: 20,
+    marginBottom: 7,
+    paddingBottom: 20
+  },
+
   imageview: {
     shadowOpacity: 0.4,
     shadowRadius: 7,
