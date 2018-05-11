@@ -44,16 +44,12 @@ export default class Main extends Component {
   render() {
     return (
       <View style={{ flex: 1 }}>
-        <StatusBar
-          backgroundColor="black"
-          barStyle="light-content"
-        />
+        <StatusBar backgroundColor="black" barStyle="light-content" />
         <Router createReducer={reducerCreate} getSceneStyle={getSceneStyle}>
           <Scene key="root">
             <Scene key="home" component={Home} hideNavBar={true} initial />
             <Scene key="welcome" hideNavBar={true} hideTabBar panHandlers={null} schema="modal" direction="vertical">
-              <Scene key="welcome" component={Welcome} title="Welcome" initial={true} panHandlers={null} />
-              <Scene key="login" component={Login} title="Login" panHandlers={null} />
+              <Scene key="login" component={Login} title="Login" initial={true} panHandlers={null} />
               <Scene key="register" component={Register} title="Register" panHandlers={null} />
               <Scene key="password" component={Password} title="Password" panHandlers={null} />
             </Scene>
