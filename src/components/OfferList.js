@@ -1,6 +1,6 @@
 
 import React, { Component } from "react";
-import { StyleSheet, FlatList, Text, Image, View, TouchableHighlight } from "react-native";
+import { StyleSheet, FlatList, Text, Image, View, TouchableHighlight, Animated, Dimensions } from "react-native";
 import PropTypes from "prop-types";
 import styles from '../styles/usercard';
 import dumpimage from '../images/dump.jpg';
@@ -11,7 +11,24 @@ class OfferList extends Component {
 
   constructor(props) {
     super(props);
+
+    this.state = {
+      pan: this.props.offer.map((offer) => {
+        return new Animated.ValueXY()
+      })
+    }
+
     this.gotocarddetails = this.gotocarddetails.bind(this);
+  }
+
+  _startAnimations = (cb) => {
+    const animations = this.props.offer.map((item, index) => {
+      return Animated.spring(this.state.pan[index], {
+        tension: 2, frition: 3,
+        toValue: {x: -Dimensions.get('window').width - 200, y: 0}
+      });
+    });
+    Animated.stagger(150, animations).start();
   }
 
   gotocarddetails(value) {
@@ -29,14 +46,14 @@ class OfferList extends Component {
     );
   }
 
-  _renderItem = ({ item }) => {
+  _renderItem = ({ item, index }) => {
     let image_content = <Image resizeMode='cover' source={{ uri: item.featured_image_url }} style={styles.listimage} />;
     if (this.props.randomoffer.isFetching) {
       image_content = <Image resizeMode='cover' source={dumpimage} style={styles.listimage} />;
     }
     return (
-      <TouchableHighlight onPress={() => this.gotocarddetails(item)} underlayColor='rgb(2,139,141)'>
-        <View style={styles.listview}>
+      <TouchableHighlight onPress={() => this.gotocarddetails(item)} key={index} underlayColor='rgb(2,139,141)'>
+        <Animated.View style={[styles.listview, { right: -Dimensions.get('window').width - 200 }, { transform: this.state.pan[index].getTranslateTransform() }]}>
           <View style={styles.imageview}>
             {image_content}
           </View>
@@ -49,10 +66,14 @@ class OfferList extends Component {
           <Text style={styles.itemtitle}>
             {item.story}
           </Text>
-        </View>
+        </Animated.View>
       </TouchableHighlight>
     );
   };
+
+  componentDidMount = () => {
+    this._startAnimations();
+  }
 
   render() {
     return (
