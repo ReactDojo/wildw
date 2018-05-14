@@ -41,7 +41,7 @@ class Home extends Component {
       });
     }
 
-    let location = await Location.getCurrentPositionAsync({ enableHighAccuracy: true });
+    let location = await Location.getCurrentPositionAsync({});
     let address = await Location.reverseGeocodeAsync(location.coords);
     let addressObj = { 
       address: address[0].name + ', ' + address[0].city + ', ' + address[0].region + ' ' + address[0].postalCode + ', ' + address[0].country,

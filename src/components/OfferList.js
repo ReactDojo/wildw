@@ -22,8 +22,9 @@ class OfferList extends Component {
   }
 
   _startAnimations = (cb) => {
+    let { pan } = this.state;
     const animations = this.props.offer.map((item, index) => {
-      return Animated.spring(this.state.pan[index], {
+      return Animated.spring(pan[index], {
         tension: 2, frition: 3,
         toValue: {x: -Dimensions.get('window').width - 200, y: 0}
       });
