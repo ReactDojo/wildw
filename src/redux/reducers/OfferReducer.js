@@ -31,12 +31,16 @@ import {
     FETCHING_AVAILABLE_STORE_SUCCESS,
     FETCHING_AVAILABLE_STORE_FAILURE,
     FETCHING_ALL_STORE_SUCCESS,
-    FETCHING_ALL_STORE_FAILURE
+    FETCHING_ALL_STORE_FAILURE,
+    POSTING_USER_LOCATION_SUCCESS,
+    POSTING_USER_LOCATION_FAILURE,
+    POSTING_USER_LOCATION_PENDING
 } from '../actions/types';
 import { combineReducers } from 'redux';
 import { AsyncStorage } from 'react-native';
 const initialState = {
     isFetching: false,
+    isPosting: false,
     errorMessage: '',
     errorAlertMessage: '',
     isloginFetching: false,
@@ -156,6 +160,15 @@ const OfferReducer = (state = initialState, action) => {
             return state;
         case FETCHING_ALL_STORE_FAILURE:
             state = Object.assign({}, state, { errorMessage: action.payload });
+            return state;
+        case POSTING_USER_LOCATION_SUCCESS: 
+            state = Object.assign({}, state, { isPosting: false });
+            return state;
+        case POSTING_USER_LOCATION_FAILURE: 
+            state = Object.assign({}, state, { isPosting: false, errorMessage: action.payload });
+            return state;
+        case POSTING_USER_LOCATION_PENDING: 
+            state = Object.assign({}, state, { isPosting: true });
             return state;
         default:
             return state;

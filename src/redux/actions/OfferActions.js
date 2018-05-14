@@ -31,8 +31,10 @@ import {
     FETCHING_AVAILABLE_STORE_FAILURE,
     FETCHING_AVAILABLE_STORE_SUCCESS,
     FETCHING_ALL_STORE_SUCCESS,
-    FETCHING_ALL_STORE_FAILURE
-
+    FETCHING_ALL_STORE_FAILURE,
+    POSTING_USER_LOCATION_PENDING,
+    POSTING_USER_LOCATION_SUCCESS,
+    POSTING_USER_LOCATION_FAILURE,
 } from './types';
 import { AsyncStorage } from 'react-native';
 import { Actions } from 'react-native-router-flux';
@@ -516,6 +518,61 @@ export const fetchAllStore = () => {
         }
         catch (error) {
             dispatch(fetchAllStoresFailure(error));
+        }
+    }
+}
+
+
+// Post Users Current Location
+export const postUserLocationSuccess = (json) => ({
+    type: POSTING_USER_LOCATION_SUCCESS,
+    payload: json
+});
+
+export const postUserLocationFailure = (error) => ({
+    type: POSTING_USER_LOCATION_FAILURE,
+    payload: error
+});
+
+export const postUserLocationPending = () => ({
+    type: POSTING_USER_LOCATION_PENDING,
+    payload: true
+});
+
+export const postUserLocation = (location) => {
+    return async dispatch => {
+        dispatch(postUserLocationPending());
+        try {
+            const token = await AsyncStorage.getItem('token');
+            const user_id = await AsyncStorage.getItem('user_id');
+            const url = REQUEST_URL + '/api/users/' + user_id + '/locations';
+
+            let userLocation = {
+                lat: location.coords.latitude,
+                long: location.coords.longitude,
+                address: location.address,
+                log_type: location.log_type,
+                userId: user_id
+            }
+
+            let requestConfig = {
+                method: "POST",
+                headers: {
+                    'Authorization': 'Bearer ' + token,
+                    'Accept': 'application/json',
+                    'Content-Type': 'application/json'
+                },
+                json: true,
+                body: JSON.stringify(userLocation)
+            }
+
+            let respond = await fetch(url, requestConfig);
+            let json = await respond.json();
+            
+            dispatch(postUserLocationSuccess(json));
+        }
+        catch (error) {
+            dispatch(postUserLocationFailure(error));
         }
     }
 }
