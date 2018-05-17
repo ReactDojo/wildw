@@ -80,7 +80,7 @@ export default class SideBar extends React.Component {
                 <TouchableHighlight onPress={() => Actions.map()}>
                   <Text style={styles.menu_text}>Map</Text>
                 </TouchableHighlight>
-                <TouchableHighlight>
+                <TouchableHighlight onPress={() => Actions.settings()}>
                   <Text style={styles.menu_text}>Settings</Text>
                 </TouchableHighlight>
                 <TouchableHighlight onPress={() => Actions.login()}>
