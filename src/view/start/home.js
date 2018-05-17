@@ -5,7 +5,7 @@ import { connect } from 'react-redux';
 import { Actions } from 'react-native-router-flux';
 import { Button } from './index';
 import styles from '../../styles/auth/index'
-import { fetchOffer, fetchCategory, fetchUserQRCode, fetchAvailableOffers, fetchGetHistory, fetchAllStore, postUserLocation,registerForPushNotificationsAsync } from '../../redux/actions/OfferActions';
+import { fetchOffer, fetchCategory, fetchUserQRCode, fetchAvailableOffers, fetchGetHistory, fetchAllStore, postUserLocation, registerForPushNotificationsAsync } from '../../redux/actions/OfferActions';
 import * as Progress from 'react-native-progress';
 
 
@@ -28,9 +28,9 @@ class Home extends Component {
     });
 
     AsyncStorage.getItem('token', (err, token) => {
-      let notification_status = this.props.registerForPushNotificationsAsync();
-        if (token === null) Actions.login();
-        else Actions.settings();
+      this.props.registerForPushNotificationsAsync();
+      if (token === null) Actions.login();
+      else Actions.offerlist();
     });
   }
 
@@ -44,9 +44,9 @@ class Home extends Component {
 
     let location = await Location.getCurrentPositionAsync({});
     let address = await Location.reverseGeocodeAsync(location.coords);
-    let addressObj = { 
+    let addressObj = {
       address: address[0].name + ', ' + address[0].city + ', ' + address[0].region + ' ' + address[0].postalCode + ', ' + address[0].country,
-      log_type: 'USER_LOGIN_LOCATION' 
+      log_type: 'USER_LOGIN_LOCATION'
     };
     let locationObj = Object.assign(addressObj, location);
     cb(locationObj);
