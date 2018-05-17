@@ -5,7 +5,7 @@ import { connect } from 'react-redux';
 import { Actions } from 'react-native-router-flux';
 import { Button } from './index';
 import styles from '../../styles/auth/index'
-import { fetchOffer, fetchCategory, fetchUserQRCode, fetchAvailableOffers, fetchGetHistory, fetchAllStore, postUserLocation } from '../../redux/actions/OfferActions';
+import { fetchOffer, fetchCategory, fetchUserQRCode, fetchAvailableOffers, fetchGetHistory, fetchAllStore, postUserLocation,registerForPushNotificationsAsync } from '../../redux/actions/OfferActions';
 import * as Progress from 'react-native-progress';
 
 
@@ -28,8 +28,9 @@ class Home extends Component {
     });
 
     AsyncStorage.getItem('token', (err, token) => {
-      if (token === null) Actions.welcome();
-      else Actions.offerlist();
+      let notification_status = this.props.registerForPushNotificationsAsync();
+        if (token === null) Actions.login();
+        else Actions.settings();
     });
   }
 
@@ -67,5 +68,5 @@ class Home extends Component {
 
 
 export default connect(null,
-  { fetchOffer, fetchCategory, fetchUserQRCode, fetchAvailableOffers, fetchGetHistory, fetchAllStore, postUserLocation }
+  { fetchOffer, fetchCategory, fetchUserQRCode, fetchAvailableOffers, fetchGetHistory, fetchAllStore, postUserLocation, registerForPushNotificationsAsync }
 )(Home);
