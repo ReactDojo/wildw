@@ -1,3 +1,6 @@
+import { AsyncStorage } from 'react-native';
+import { Actions } from 'react-native-router-flux';
+import { Permissions, Notifications } from 'expo';
 import {
     FETCHING_OFFER_REQUEST,
     FETCHING_OFFER_SUCCESS,
@@ -35,10 +38,11 @@ import {
     POSTING_USER_LOCATION_PENDING,
     POSTING_USER_LOCATION_SUCCESS,
     POSTING_USER_LOCATION_FAILURE,
+    POSTING_USER_PUSH_NOTIFICATION_SUCCESS,
+    POSTING_USER_PUSH_NOTIFICATION_FAILURE,
+    POSTING_USER_PUSH_NOTIFICATION_PENDING
 } from './types';
-import { AsyncStorage } from 'react-native';
-import { Actions } from 'react-native-router-flux';
-import store from '../store';
+
 const REQUEST_URL = "https://offerbotapp.herokuapp.com";
 // offer list
 export const fetchingOfferRequest = () => ({ type: FETCHING_OFFER_REQUEST });
@@ -55,7 +59,7 @@ export const fetchOffer = () => {
         dispatch(fetchingOfferRequest());
         try {
             const value = await AsyncStorage.getItem('token');
-            
+
             let requestConfig = {
                 method: "GET",
                 headers: { 'Authorization': 'Bearer ' + value }
@@ -145,7 +149,7 @@ export const fetchCategory = () => {
         dispatch(fetchingCategoryRequest());
         try {
             const value = await AsyncStorage.getItem('token');
-            
+
             let requestConfig = {
                 method: "GET",
                 headers: { 'Authorization': 'Bearer ' + value }
@@ -568,11 +572,89 @@ export const postUserLocation = (location) => {
 
             let respond = await fetch(url, requestConfig);
             let json = await respond.json();
-            
+
             dispatch(postUserLocationSuccess(json));
         }
         catch (error) {
             dispatch(postUserLocationFailure(error));
         }
     }
+}
+
+
+
+export const postRegisterForPushNotificationSuccess = (json) => ({
+    type: POSTING_USER_PUSH_NOTIFICATION_SUCCESS,
+    payload: json
+});
+
+export const postRegisterForPushNotificationFailure = (error) => ({
+    type: POSTING_USER_PUSH_NOTIFICATION_FAILURE,
+    payload: error
+});
+
+export const postRegisterForPushNotificationPending = () => ({
+    type: POSTING_USER_PUSH_NOTIFICATION_PENDING,
+    payload: true
+});
+
+
+export const registerForPushNotificationsAsync = () => {
+    return async dispatch => {
+        dispatch(postRegisterForPushNotificationPending());
+        try {
+            const login_token = await AsyncStorage.getItem('token');
+            const user_id = await AsyncStorage.getItem('user_id');
+            const url = REQUEST_URL + '/api/users/' + user_id + '/pushtokens';
+    
+            const { status: existingStatus } = await Permissions.getAsync(
+                Permissions.NOTIFICATIONS
+            );
+    
+            let finalStatus = existingStatus;
+    
+            // only ask if permissions have not already been determined, because
+            // iOS won't necessarily prompt the user a second time.
+            if (existingStatus !== 'granted') {
+                // Android remote notification permissions are granted during the app
+                // install, so this will only ask on iOS
+                const { status } = await Permissions.askAsync(Permissions.NOTIFICATIONS);
+                finalStatus = status;
+            }
+    
+            // Stop here if the user did not grant permissions
+            if (finalStatus !== 'granted') {
+                return;
+            }
+    
+            // Get the token that uniquely identifies this device
+            let push_token = await Notifications.getExpoPushTokenAsync();
+    
+
+            let requestConfig = {
+                method: "POST",
+                headers: {
+                    'Authorization': 'Bearer ' + login_token,
+                    'Accept': 'application/json',
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({
+                    token: push_token,
+                    userId: user_id
+                }),
+                json: true
+            }
+
+            // POST the token to your backend server from where you can retrieve it to send push notifications.
+            let response = await fetch(url, requestConfig);
+            let json = await response.json();
+
+            dispatch(postRegisterForPushNotificationSuccess(json));
+        }
+        catch (error) {
+            dispatch(postRegisterForPushNotificationFailure(error));
+        }
+        
+    }
+
 }
