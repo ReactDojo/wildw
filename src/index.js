@@ -14,6 +14,7 @@ import Login from './view/start/auth/login';
 import Register from './view/start/auth/register';
 import Password from './view/start/auth/password';
 import store from './redux/store';
+import Settings from './view/Settings';
 
 const reducerCreate = params => {
   const defaultReducer = new Reducer(params);
@@ -47,18 +48,19 @@ export default class Main extends Component {
         <StatusBar backgroundColor="black" barStyle="light-content" />
         <Router createReducer={reducerCreate} getSceneStyle={getSceneStyle}>
           <Scene key="root">
-            <Scene key="home" component={Home} hideNavBar={true} initial />
+            <Scene key="home" component={Home} hideNavBar={true}  />
             <Scene key="welcome" hideNavBar={true} hideTabBar panHandlers={null} schema="modal" direction="vertical">
-              <Scene key="login" component={Login} title="Login" initial={true} panHandlers={null} />
+              <Scene key="login" component={Login} title="Login" panHandlers={null} initial/>
               <Scene key="register" component={Register} title="Register" panHandlers={null} />
               <Scene key="password" component={Password} title="Password" panHandlers={null} />
             </Scene>
             <Scene key="drawer" hideNavBar={true} drawer contentComponent={SideBar} drawerWidth={192}>
               <Scene key="main" >
-                <Scene key="offerlist" hideNavBar={true} component={Usercard} initial />
+                <Scene key="offerlist" hideNavBar={true} component={Usercard} />
                 <Scene key="offerdetails" hideNavBar={true} component={CardDetails} />
                 <Scene key="myoffer" hideNavBar={true} component={MyOffer} />
                 <Scene key="mycard" hideNavBar={true} component={MyCard} />
+                <Scene key="settings" hideNavBar={true} component={Settings} />
                 <Scene key="map" hideNavBar={true} component={Map} />
               </Scene>
             </Scene>
