@@ -1,8 +1,8 @@
 {
-  "expoServerPort": 19000,
-  "packagerPort": 19001,
-  "packagerPid": 5788,
-  "expoServerNgrokUrl": "https://e8-e3q.billfan10.wildwoodoffers-reactnative.exp.direct",
-  "packagerNgrokUrl": "https://packager.e8-e3q.billfan10.wildwoodoffers-reactnative.exp.direct",
-  "ngrokPid": 9208
+  "expoServerPort": null,
+  "packagerPort": null,
+  "packagerPid": null,
+  "expoServerNgrokUrl": null,
+  "packagerNgrokUrl": null,
+  "ngrokPid": null
 }
